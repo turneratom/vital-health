@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VitalAI - Global Health Abundance</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0000ff">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; min-height: 100vh; }
+    .header { text-align: center; color: white; margin-bottom: 30px; }
+    .section { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    #video, #canvas { width: 100%; max-width: 400px; height: 300px; border-radius: 10px; background: #f0f0f0; }
+    button { background: #4CAF50; color: white; border: none; padding: 12px 24px; border-radius: 25px; cursor: pointer; font-size: 16px; margin: 10px; }
+    button:hover { background: #45a049; }
+    button.pro { background: #ff9800; }
+    button.danger { background: #f44336; }
+    #chat { height: 200px; border: 1px solid #ddd; border-radius: 10px; padding: 10px; overflow-y: scroll; background: #fafafa; }
+    #chat-input { width: 70%; padding: 10px; border: 1px solid #ddd; border-radius: 20px; }
+    #send { width: 25%; }
+    #analysis { font-weight: bold; color: #4CAF50; }
+    .tier-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+    .modal-content { background: white; margin: 15% auto; padding: 30px; border-radius: 20px; width: 80%; max-width: 500px; text-align: center; }
+    @media (max-width: 600px) { .section { padding: 15px; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🚀 VitalAI Health Coach</h1>
+    <p>Global Abundance: Free Health for All</p>
+  </div>
+
+  <div class="section">
+    <h2>📸 Camera Scan</h2>
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <br>
+    <button onclick="snap()">Snap & Analyze</button>
+    <div id="analysis">Ready for scan...</div>
+  </div>
+
+  <div class="section">
+    <h2>💬 AI Coach Chat</h2>
+    <div id="chat"></div>
+    <input type="text" id="chat-input" placeholder="Ask your coach... (e.g. meal plan)">
+    <button id="send" onclick="sendChat()">Send</button>
+  </div>
+
+  <div class="section">
+    <h2>⭐ Tiers</h2>
+    <button onclick="showTiers()">Upgrade Pro</button>
+    <p>Free: Basic scans/chat. Pro: Advanced AI + priority.</p>
+  </div>
+
+  <div id="tier-modal" class="tier-modal">
+    <div class="modal-content">
+      <h2>VitalAI Tiers</h2>
+      <p><strong>Free</strong>: Unlimited basic scans/chat.</p>
+      <p><strong>Pro ($9.99/mo)</strong>: Aging insights, custom plans, Life Biosciences watch.</p>
+      <button onclick="subscribe()">Subscribe Pro</button>
+      <button onclick="showTiers()" class="danger">Close</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Inline for PWA no deps
+    let stream;
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } }).then(s => {
+      document.getElementById('video').srcObject = s;
+    }).catch(e => console.error('Cam error', e));
+
+    function snap() {
+      const video = document.getElementById('video');
+      const canvas = document.getElementById('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      canvas.style.display = 'block';
+      // Stub analysis
+      const calories = 200 + Math.floor(Math.random() * 300);
+      const posture = Math.floor(Math.random() * 100);
+      document.getElementById('analysis').innerHTML = `Calories: ${calories} | Posture Score: ${posture}/100<br>Tip: Stand tall!`;
+    }
+
+    function sendChat() {
+      const input = document.getElementById('chat-input');
+      const chat = document.getElementById('chat');
+      chat.innerHTML += `<div><strong>You:</strong> ${input.value}</div>`;
+      // Mock AI
+      setTimeout(() => {
+        const responses = ['Great question! Eat whole foods.', 'Try Yamanaka-inspired routine.', 'Pro tier unlocks full plan.'];
+        chat.innerHTML += `<div><strong>Coach:</strong> ${responses[Math.floor(Math.random()*3)]}</div>`;
+        chat.scrollTop = chat.scrollHeight;
+      }, 1000);
+      input.value = '';
+    }
+
+    function showTiers() { document.getElementById('tier-modal').style.display = 'block'; }
+    function subscribe() { alert('Stripe stub: Pro unlocked! (Impl next)'); showTiers(); }
+
+    // PWA register
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>
