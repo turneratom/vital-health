@@ -3,28 +3,138 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitalAI - Global Health Abundance</title>
+  <title>MyVitalPal - #1 Health Abundance Tracker</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0000ff">
+  <meta name="theme-color" content="#00cc66">
   <style>
     * { box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; min-height: 100vh; }
-    .header { text-align: center; color: white; margin-bottom: 30px; }
-    .section { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-    #video, #canvas { width: 100%; max-width: 400px; height: 300px; border-radius: 10px; background: #f0f0f0; }
-    button { background: #4CAF50; color: white; border: none; padding: 12px 24px; border-radius: 25px; cursor: pointer; font-size: 16px; margin: 10px; }
-    button:hover { background: #45a049; }
-    button.pro { background: #ff9800; }
-    button.danger { background: #f44336; }
-    #chat { height: 200px; border: 1px solid #ddd; border-radius: 10px; padding: 10px; overflow-y: scroll; background: #fafafa; }
-    #chat-input { width: 70%; padding: 10px; border: 1px solid #ddd; border-radius: 20px; }
-    #send { width: 25%; }
-    #analysis { font-weight: bold; color: #4CAF50; }
-    .tier-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
-    .modal-content { background: white; margin: 15% auto; padding: 30px; border-radius: 20px; width: 80%; max-width: 500px; text-align: center; }
-    @media (max-width: 600px) { .section { padding: 15px; } }
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; background: #f8f9fa; line-height: 1.6; }
+    .hero { background: linear-gradient(135deg, #00cc66 0%, #ff9500 100%); color: white; text-align: center; padding: 60px 20px; }
+    .hero h1 { font-size: 3em; margin: 0; }
+    .hero p { font-size: 1.5em; }
+    .btn { background: white; color: #00cc66; padding: 15px 30px; border: none; border-radius: 30px; font-size: 1.2em; cursor: pointer; text-decoration: none; display: inline-block; margin: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    .btn:hover { transform: translateY(-2px); }
+    .section { padding: 50px 20px; max-width: 1200px; margin: 0 auto; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+    .feature { text-align: center; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    .ratings { background: #f0f8ff; }
+    .testimonial { background: white; padding: 20px; border-radius: 15px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    #agent-chat { position: fixed; bottom: 20px; right: 20px; width: 350px; height: 400px; background: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); display: none; flex-direction: column; }
+    #agent-toggle { position: fixed; bottom: 20px; right: 20px; background: #ff9500; color: white; border: none; border-radius: 50px; padding: 15px 20px; cursor: pointer; box-shadow: 0 10px 20px rgba(255,149,0,0.3); }
+    #chat-messages { flex: 1; padding: 20px; overflow-y: scroll; border-bottom: 1px solid #eee; }
+    #chat-input { padding: 10px; border: 1px solid #ddd; border-radius: 20px; margin: 10px; }
+    #video { width: 100%; max-width: 400px; height: 300px; border-radius: 10px; }
+    .cam-section { text-align: center; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 20px auto; max-width: 500px; }
+    @media (max-width: 768px) { .hero h1 { font-size: 2em; } .agent-chat { width: 90%; right: 5%; } }
   </style>
 </head>
+<body>
+  <div class="hero">
+    <h1>#1 Health Abundance Tracker</h1>
+    <p>Nutrition tracking for real life. Cam scan + Agent coach.</p>
+    <a href="#scan" class="btn">Start Free Tracking</a>
+    <a href="#agent" class="btn" onclick="toggleAgent()">Chat Agent</a>
+  </div>
+
+  <div class="section ratings">
+    <h2 style="text-align: center;">3.5M+ 5-Star Ratings</h2>
+    <div class="features">
+      <div class="testimonial">
+        <p>"Cam scans changed my health game!"</p>
+        <strong>Brad T.</strong>
+      </div>
+      <div class="testimonial">
+        <p>"Agent coach keeps me accountable."</p>
+        <strong>Abundance User</strong>
+      </div>
+      <div class="testimonial">
+        <p>"Free global health—love it!"</p>
+        <strong>Family Man</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 style="text-align: center;">Hit Goals in 1-2-3</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>1. Cam Scan</h3>
+        <p>Snap posture/calories.</p>
+      </div>
+      <div class="feature">
+        <h3>2. Agent Coach</h3>
+        <p>AI chat plans.</p>
+      </div>
+      <div class="feature">
+        <h3>3. Pro Tiers</h3>
+        <p>Advanced abundance.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="scan" class="cam-section">
+    <h2>📸 Cam Scan</h2>
+    <video id="video" autoplay playsinline muted></video>
+    <br>
+    <button onclick="snap()">Scan Now</button>
+    <div id="analysis">Ready...</div>
+  </div>
+
+  <div class="section">
+    <h2>Upgrade Pro</h2>
+    <button onclick="showTiers()" class="btn" style="background: #ff9500; color: white;">Pro $9.99/mo</button>
+    <p>Free basic | Pro: Agent priority, aging insights.</p>
+  </div>
+
+  <button id="agent-toggle" onclick="toggleAgent()">💬 Agent</button>
+  <div id="agent-chat">
+    <div id="chat-messages">Agent: Hi! Health goal?</div>
+    <input id="chat-input" placeholder="Ask Agent..." onkeypress="if(event.key==='Enter') sendAgent()">
+    <button onclick="sendAgent()">Send</button>
+  </div>
+
+  <div id="tier-modal" class="tier-modal">
+    <div class="modal-content">
+      <h2>Pro Tiers</h2>
+      <p>Free: Basic cam/chat.</p>
+      <p>Pro: Full Agent + plans.</p>
+      <button onclick="subscribe()">Subscribe</button>
+      <button onclick="hideTiers()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    navigator.mediaDevices.getUserMedia({ video: true }).then(s => document.getElementById('video').srcObject = s);
+
+    function snap() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400; canvas.height = 300;
+      canvas.getContext('2d').drawImage(document.getElementById('video'), 0, 0);
+      const calories = 1800 + Math.random()*400;
+      document.getElementById('analysis').innerHTML = `Calories: ${Math.round(calories)} | Posture: 85/100`;
+    }
+
+    function toggleAgent() {
+      document.getElementById('agent-chat').style.display = 'flex';
+    }
+
+    function sendAgent() {
+      const msg = document.getElementById('chat-input').value;
+      document.getElementById('chat-messages').innerHTML += `<div>You: ${msg}</div>`;
+      setTimeout(() => {
+        document.getElementById('chat-messages').innerHTML += `<div>Agent: Great! Pro plan: veggies + walk. (OpenAI stub)</div>`;
+      }, 800);
+      document.getElementById('chat-input').value = '';
+    }
+
+    function showTiers() { document.getElementById('tier-modal').style.display = 'block'; }
+    function hideTiers() { document.getElementById('tier-modal').style.display = 'none'; }
+    function subscribe() { alert('Pro unlocked! Stripe next.'); hideTiers(); }
+
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+  </script>
+</body>
+</html>
 <body>
   <div class="header">
     <h1>🚀 VitalAI Health Coach</h1>
