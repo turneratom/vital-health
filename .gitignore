@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+.better-auth-secret.txt
+*.tsbuildinfo
+.DS_Store
+smoke-shots/
+.shipper/
