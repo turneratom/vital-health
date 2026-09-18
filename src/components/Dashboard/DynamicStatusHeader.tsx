@@ -5,17 +5,8 @@ import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import { useSession } from '@/lib/auth-client';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Session ID helper ── */
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'ssr';
-  let id = sessionStorage.getItem('vive-session-id');
-  if (!id) {
-    id = crypto.randomUUID();
-    sessionStorage.setItem('vive-session-id', id);
-  }
-  return id;
-}
-
 /* ═══════════════════════════════════════════════
    MOOD DEFINITIONS
    Each mood has a background gradient, emoji, headline,
@@ -1065,7 +1056,7 @@ interface DynamicStatusHeaderProps {
 
 export function DynamicStatusHeader({ onSelectProtocol, selectedProtocol }: DynamicStatusHeaderProps) {
   const ghostMode = useGhostMode();
-  const sessionId = useMemo(() => getSessionId(), []);
+  const sessionId = useMemo(() => getTwinSessionId(), []);
   const [mounted, setMounted] = useState(false);
   const [showProtocolModal, setShowProtocolModal] = useState(false);
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
+import { getTwinSessionId } from '@/lib/twinSession';
 import { usePerformanceScore } from '../../features/dashboard/hooks/usePerformanceScore';
 import { generateArchitectResponse, buildBioContext } from '../../lib/useAI';
 import type { BioSnapshot } from '../../lib/useAI';
@@ -11,8 +12,6 @@ import type { ProtocolSupplement, ProtocolIntervention, DynamicTarget, Supplemen
    Real-time personalized supplement stacks, interventions,
    and dynamic targets driven by Bio-Vault + System Vitals.
    ═══════════════════════════════════════════════════════════════ */
-
-const SESSION_ID = 'vive-user-001';
 
 /* ── Priority badge colors ── */
 const PRIORITY_CONFIG: Record<SupplementPriority, { color: string; glow: string; label: string }> = {
@@ -47,6 +46,7 @@ const CATEGORY_ICONS: Record<string, string> = {
 type FocusMode = 'protocol' | 'interventions' | 'targets';
 
 const ProtocolsView: React.FC = () => {
+  const SESSION_ID = getTwinSessionId();
   const [mounted, setMounted] = useState(false);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [focusMode, setFocusMode] = useState<FocusMode>('protocol');

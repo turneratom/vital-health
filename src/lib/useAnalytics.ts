@@ -3,6 +3,7 @@ import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { getGlobalGhostMode } from '../components/Presence/usePresenceState';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /**
  * Scrub personal metadata from analytics payloads when ghost mode is active.
  * Removes names, emails, IDs, and any PII-like fields from JSON metadata strings.
@@ -68,7 +69,7 @@ export function useAnalytics() {
   const getSessionId = useCallback(() => {
     if (getGlobalGhostMode()) return 'anonymous_ghost';
     if (typeof window === 'undefined') return 'default';
-    return sessionStorage.getItem('vive-session-id') || 'default';
+    return getTwinSessionId();
   }, []);
 
   /**
@@ -110,7 +111,7 @@ export function useAnalytics() {
     }
 
     trackEvent({
-      sessionId: isGhost ? 'anonymous_ghost' : getSessionId(),
+      sessionId: isGhost ? 'anonymous_ghost' : getTwinSessionId(),
       eventType,
       eventKey,
       metadata: scrubMetadata(finalMetadata, isGhost),

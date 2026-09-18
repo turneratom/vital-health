@@ -3,6 +3,7 @@ import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    TRAJECTORY CANVAS — 90-Day Biological Age Projection
    
@@ -42,14 +43,6 @@ const T = {
 }
 
 /* ── Helpers ── */
-function getSessionId(): string {
-  try {
-    let id = localStorage.getItem('vive-session-id')
-    if (!id) { id = `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`; localStorage.setItem('vive-session-id', id) }
-    return id
-  } catch { return 'guest-user' }
-}
-
 function lerp(a: number, b: number, t: number) { return a + (b - a) * t }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -729,7 +722,7 @@ function TrajectoryLoader() {
    ═══════════════════════════════════════════════════════════════ */
 
 export default function TrajectoryCanvas() {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const trajectory = useQuery(api.bioTrajectory.get90DayTrajectory, { sessionId })
   const [activeView, setActiveView] = useState<'graph' | 'components'>('graph')
 

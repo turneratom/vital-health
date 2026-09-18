@@ -4,6 +4,7 @@ import { api } from '../../convex/_generated/api'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { ReactiveOverrideResult, RecoveryCommand } from '../../convex/reactiveOverride'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const T = {
   bg: '#0A0A0B',
@@ -373,9 +374,7 @@ function ConfidenceBar({ confidence }: { confidence: number }) {
    ══════════════════════════════════════════════════════════════════ */
 
 export default function RecoveryPriorityBlock() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const override = useQuery(api.reactiveOverride.getReactiveOverride, { sessionId })
 

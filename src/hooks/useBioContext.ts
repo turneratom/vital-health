@@ -3,6 +3,7 @@ import { useMemo, useEffect, useRef, useState } from 'react';
 import { api } from '../../convex/_generated/api';
 import { readCacheSync, writeCache, CACHE_KEYS } from '@/lib/localFirstCache';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    useBioContext — Unified Bio-Intelligence Aggregator
    
@@ -12,21 +13,6 @@ import { readCacheSync, writeCache, CACHE_KEYS } from '@/lib/localFirstCache';
    with a subtle "syncing" indicator until fresh data arrives.
    ═══════════════════════════════════════════════════════════════ */
 
-const SESSION_KEY = 'vive-session-id';
-
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'default';
-  try {
-    let id = localStorage.getItem(SESSION_KEY);
-    if (!id) {
-      id = crypto.randomUUID();
-      localStorage.setItem(SESSION_KEY, id);
-    }
-    return id;
-  } catch {
-    return 'default';
-  }
-}
 
 export interface BioContextInsight {
   id: string;
@@ -83,7 +69,7 @@ function deriveIntegrity(integrity: number): { label: string; color: string } {
 }
 
 export function useBioContext(): BioContextData {
-  const sessionId = useMemo(() => getSessionId(), []);
+  const sessionId = useMemo(() => getTwinSessionId(), []);
 
   // Synchronous cache read for instant first render
   const cachedRef = useRef(

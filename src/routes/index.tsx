@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import ProtocolOperatingSystem from '../components/ProtocolOperatingSystem'
+import { ViewManager } from '@/components/layout/ViewManager'
 
 export const Route = createFileRoute('/')({
-  component: ProtocolOperatingSystem,
+  component: ViewManager,
 })

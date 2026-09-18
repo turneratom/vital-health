@@ -40,7 +40,7 @@ const PLAN_FEATURES = [
   'Real-time biomarker correlation engine',
   'Squad performance analytics & peer benchmarks',
   'Priority access to new protocol research',
-  'Encrypted Biological Vault with physician sharing',
+  'Bio-Vault for labs & records with optional sharing (privacy controls — not HIPAA certified)',
 ];
 
 export function CheckoutModal({ open, onClose, ghostMode = false }: CheckoutModalProps) {

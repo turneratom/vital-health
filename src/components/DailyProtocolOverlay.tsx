@@ -4,6 +4,7 @@ import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import type { Id } from '../../convex/_generated/dataModel'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const T = {
   bg: '#0A0A0B',
@@ -116,7 +117,7 @@ interface DailyProtocolOverlayProps {
 }
 
 export default function DailyProtocolOverlay({ isOpen, onClose, onStabilize }: DailyProtocolOverlayProps) {
-  const sessionId = typeof window !== 'undefined' ? localStorage.getItem('vive-session-id') || 'guest-user' : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const protocolStatus = useQuery(api.protocols.getProtocolsByBiologicalWindow, { sessionId })
   const toggleCompletion = useMutation(api.protocols.oneTapVerify)

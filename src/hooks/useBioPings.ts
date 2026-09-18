@@ -2,6 +2,7 @@ import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 export interface BioPing {
   id: string;
   category: "opportunity" | "recovery" | "nutrition" | "supplement" | "momentum" | "circadian";
@@ -17,9 +18,7 @@ export interface BioPing {
 }
 
 export function useBioPings() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user';
+  const sessionId = getTwinSessionId();
 
   const data = useQuery(api.bioPings.getProactivePings, { sessionId });
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(() => {

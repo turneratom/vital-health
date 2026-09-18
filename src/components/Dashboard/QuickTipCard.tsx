@@ -5,17 +5,8 @@ import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import { useSession } from '@/lib/auth-client';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Session ID helper ── */
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'ssr';
-  let id = sessionStorage.getItem('vive-session-id');
-  if (!id) {
-    id = crypto.randomUUID();
-    sessionStorage.setItem('vive-session-id', id);
-  }
-  return id;
-}
-
 /* ── Status levels with high-contrast colors ── */
 type StatusLevel = 'great' | 'steady' | 'needs-rest';
 
@@ -346,7 +337,7 @@ function getIcon(iconKey: string, color: string) {
    ══════════════════════════════════════════════ */
 export function QuickTipCard() {
   const ghostMode = useGhostMode();
-  const sessionId = useMemo(() => getSessionId(), []);
+  const sessionId = useMemo(() => getTwinSessionId(), []);
   const [dismissed, setDismissed] = useState(false);
   const [mounted, setMounted] = useState(false);
 

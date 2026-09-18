@@ -10,6 +10,7 @@ import {
   type BioVaultSnapshot,
 } from '@/lib/SupplementSynergy';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════════
    SUPPLEMENT SYNERGY HUD — Precision-Adjustment Alert Surface
    
@@ -287,7 +288,7 @@ function SynergyAlertCard({
    ══════════════════════════════════════════════════════════════════ */
 
 export function SupplementSynergyHUD() {
-  const sessionId = typeof window !== 'undefined' ? localStorage.getItem('vive_session_id') || localStorage.getItem('vive-session-id') || '' : '';
+  const sessionId = getTwinSessionId();
 
   // Fetch bioVault data
   const bioVault = useQuery(api.queries.getBioVaultBySession, sessionId ? { sessionId } : 'skip');

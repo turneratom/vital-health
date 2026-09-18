@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════
    PROTOCOL MASTER — Execution HUD
    
@@ -67,10 +68,6 @@ const CATEGORY_COLORS: Record<string, string> = {
   nutrition: '#7CB68E',
   recovery: '#D4847A',
   movement: '#E8976C',
-}
-
-function getSessionId(): string {
-  try { return localStorage.getItem('vive-session-id') || 'guest-user' } catch { return 'guest-user' }
 }
 
 /* ── Vitality Score Ring ── */
@@ -528,7 +525,7 @@ function BiologicalWindowCard({
    ══════════════════════════════════════════════════════════════ */
 
 export default function ProtocolMasterHUD() {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const windowData = useQuery(api.protocols.getProtocolsByBiologicalWindow, { sessionId })
   const adherence = useQuery(api.protocols.getAdherenceScore, { sessionId })
   const streak = useQuery(api.eliteScore.getAdherenceStreak, { sessionId })

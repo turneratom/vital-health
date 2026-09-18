@@ -31,6 +31,8 @@ import {
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useBiometricSync } from '@/hooks/useBiometricSync';
+import { getTwinSessionId } from '@/lib/twinSession'
+
 
 /* ── Design Tokens ── */
 const T = {
@@ -332,9 +334,7 @@ export function ProgressIntelligence() {
 
   useEffect(() => { setMounted(true); }, []);
 
-  const sessionId = typeof window !== 'undefined'
-    ? (localStorage.getItem('vive_session_id') || 'guest-session')
-    : 'guest-session';
+  const sessionId = getTwinSessionId();
 
   // Live vitals for today's recovery
   const { vitals } = useBiometricSync();

@@ -6,6 +6,7 @@ import { api } from '../../convex/_generated/api'
 import { classifyAllMarkers, extractTextFromFile, type ClassifiedMarker } from '@/lib/LabResultParser'
 import { useRapidIntake, type RapidIntakeStatus } from '@/hooks/useRapidIntake'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════
    RAPID BIO-ONBOARDING — Universal Sync + Rapid Intake
    
@@ -921,7 +922,7 @@ function RapidBioOnboarding() {
     setError(null)
 
     try {
-      const sessionId = localStorage.getItem('vive-session-id') || 'guest-user'
+      const sessionId = getTwinSessionId()
       let rawText = pastedText
 
       if (uploadedFile) {

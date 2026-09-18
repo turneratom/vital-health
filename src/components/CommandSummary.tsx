@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    COMMAND SUMMARY — Mission Briefing Overlay
    
@@ -41,10 +42,6 @@ const T = {
   blue: '#3B82F6',
   blueGlow: 'rgba(59,130,246,0.15)',
   border: 'rgba(255,255,255,0.05)',
-}
-
-function getSessionId(): string {
-  try { return localStorage.getItem('vive-session-id') || 'guest-user' } catch { return 'guest-user' }
 }
 
 function stabilityColor(pct: number): { color: string; glow: string } {
@@ -179,7 +176,7 @@ interface CommandSummaryProps {
 }
 
 export default function CommandSummary({ isOpen, onClose }: CommandSummaryProps) {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const [scanLine, setScanLine] = useState(0)
   const [uptimeTick, setUptimeTick] = useState(0)
   // Re-scan state per tile

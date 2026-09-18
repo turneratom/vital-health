@@ -3,6 +3,7 @@ import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    SUBSTANCE TRACKER — Minimalist Peptide/HRT Dosage Interface
    
@@ -173,7 +174,7 @@ function PulseAlert({ alert, onDismiss, onAct }: {
 
 /* ── Main SubstanceTracker Component ── */
 export default function SubstanceTracker() {
-  const sessionId = typeof window !== 'undefined' ? localStorage.getItem('vive-session-id') || 'guest-user' : 'guest-user';
+  const sessionId = getTwinSessionId();
 
   const dashboard = useQuery(api.substanceIntegrity.getDashboardState, { sessionId });
   const createCycle = useMutation(api.substanceIntegrity.createCycle);

@@ -3,6 +3,7 @@ import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    SOMATIC HISTORY SLIDER — 30-Day Time-Travel for the HUD
    
@@ -49,14 +50,6 @@ export interface HistoryDaySnapshot {
   tensionRegions: string[]
   workoutMinutes: number
   hasData: boolean
-}
-
-function getSessionId(): string {
-  try {
-    let id = localStorage.getItem('vive-session-id')
-    if (!id) { id = `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`; localStorage.setItem('vive-session-id', id) }
-    return id
-  } catch { return 'guest-user' }
 }
 
 /** Compute inflammation & coherence from raw day data */
@@ -133,7 +126,7 @@ export default function SomaticHistorySlider({
 }: {
   onDaySelect?: (snapshot: HistoryDaySnapshot | null) => void
 }) {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const [selectedDay, setSelectedDay] = useState<number>(0) // 0 = today
   const [isDragging, setIsDragging] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)

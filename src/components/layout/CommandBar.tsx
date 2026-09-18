@@ -36,25 +36,26 @@ interface CommandItem {
 }
 
 const COMMAND_ITEMS: CommandItem[] = [
-  { id: 'dashboard', label: 'Command Center', description: 'Main dashboard overview', icon: '⬡', category: 'core', keywords: ['home', 'main', 'overview', 'dashboard'] },
-  { id: 'briefing', label: 'Briefing Room', description: 'AI brief & coaching chat', icon: '◉', category: 'core', keywords: ['ai', 'brief', 'chat', 'coach', 'ask'] },
-  { id: 'protocols', label: 'Daily Protocols', description: 'Health task checklist', icon: '✦', category: 'core', keywords: ['protocol', 'tasks', 'checklist', 'habits', 'routine'] },
-  { id: 'biovault', label: 'Bio-Vault', description: 'Health resume & trends', icon: '◈', category: 'core', keywords: ['vault', 'bio', 'trends', 'history', 'resume', 'records'] },
-  { id: 'journal', label: 'Journal', description: 'Food, water & exercise logs', icon: '◎', category: 'health', keywords: ['journal', 'log', 'food', 'water', 'meal', 'exercise'] },
-  { id: 'vitals', label: 'Vitals', description: 'Biometric data & HRV', icon: '♡', category: 'health', keywords: ['vitals', 'hrv', 'heart', 'biometrics', 'health'] },
+  /* MVP path first (actions sort ahead of core) */
+  { id: '__morningbrief' as any, label: 'Morning Brief', description: 'Daily directives — primary home entry', icon: '☀', category: 'actions', keywords: ['morning', 'brief', 'directives', 'daily', 'home', 'protocol', 'today', 'mvp'], isAction: true },
+  { id: '__quicklog' as any, label: 'Manual Vitals / Quick Log', description: 'Enter HR, HRV, sleep, steps, food (wearables coming later)', icon: '⚡', category: 'actions', keywords: ['log', 'vitals', 'quick log', 'quick', 'entry', 'record', 'track', 'hr', 'hrv', 'sleep', 'mood', 'energy', 'manual', 'steps', 'food', 'meal'], isAction: true },
+  { id: '__visitpacket' as any, label: 'Doctor Visit Prep', description: 'Export visit packet (JSON / printable) from Bio-Resume', icon: '📋', category: 'actions', keywords: ['doctor', 'visit', 'packet', 'export', 'prep', 'bio resume', 'json', 'pdf', 'report', 'clinic'], isAction: true },
+  { id: '__connections' as any, label: 'Connections (Coming later)', description: 'Wearables not live — use Manual Vitals instead', icon: '⬡', category: 'actions', keywords: ['connections', 'wearable', 'oura', 'whoop', 'apple', 'garmin', 'manual vitals', 'settings', 'coming later'], isAction: true },
+  { id: 'dashboard', label: 'Command Center', description: 'Home — Morning Brief & Visit Prep', icon: '⬡', category: 'core', keywords: ['home', 'main', 'overview', 'dashboard'] },
+  { id: 'biovault', label: 'Bio-Vault (Paste Labs)', description: 'Paste lab text → parse → sync to vault', icon: '◈', category: 'core', keywords: ['vault', 'bio', 'trends', 'history', 'resume', 'records', 'paste', 'labs', 'blood'] },
+  { id: 'journal', label: 'Food / Quick Log', description: 'Food, water & exercise text logs', icon: '◎', category: 'core', keywords: ['journal', 'log', 'food', 'water', 'meal', 'exercise', 'quick'] },
+  { id: 'vitals', label: 'Manual Vitals', description: 'Biometrics — enter manually (wearables coming later)', icon: '♡', category: 'core', keywords: ['vitals', 'hrv', 'heart', 'biometrics', 'health', 'manual'] },
+  { id: 'briefing', label: 'Briefing Room', description: 'AI brief & coaching chat', icon: '◉', category: 'health', keywords: ['ai', 'brief', 'chat', 'coach', 'ask'] },
+  { id: 'protocols', label: 'Daily Protocols', description: 'Health task checklist', icon: '✦', category: 'health', keywords: ['protocol', 'tasks', 'checklist', 'habits', 'routine'] },
   { id: 'nutrition', label: 'Nutrition', description: 'Macros & meal planning', icon: '◐', category: 'health', keywords: ['nutrition', 'macros', 'calories', 'diet', 'food'] },
   { id: 'activity', label: 'Activity', description: 'Workouts & movement', icon: '△', category: 'health', keywords: ['activity', 'workout', 'exercise', 'movement', 'training'] },
   { id: 'progress', label: 'Progress', description: 'Weight & body composition', icon: '▲', category: 'insights', keywords: ['progress', 'weight', 'body', 'composition', 'goals'] },
-  { id: 'dna', label: 'DNA Insights', description: 'Genetic analysis', icon: '⧬', category: 'insights', keywords: ['dna', 'genetic', 'genes', 'genome'] },
+  { id: 'dna', label: 'DNA Insights', description: 'Genetic analysis (later / optional)', icon: '⧬', category: 'insights', keywords: ['dna', 'genetic', 'genes', 'genome'] },
   { id: 'biometrics', label: 'Biometrics', description: 'Detailed bio readings', icon: '◇', category: 'insights', keywords: ['biometrics', 'readings', 'data', 'metrics'] },
   { id: 'milestones', label: 'Milestones', description: 'Achievements & records', icon: '★', category: 'insights', keywords: ['milestones', 'achievements', 'records', 'personal best'] },
   { id: 'report', label: 'Weekly Report', description: 'Performance summary & trends', icon: '◆', category: 'insights', keywords: ['report', 'weekly', 'summary', 'review'] },
   { id: 'community', label: 'Community', description: 'Network & leaderboard', icon: '◬', category: 'social', keywords: ['community', 'social', 'network', 'leaderboard', 'friends'] },
   { id: 'blueprint', label: 'Blueprint', description: 'Protocol builder', icon: '⬢', category: 'social', keywords: ['blueprint', 'protocol', 'builder', 'plan'] },
-  { id: '__morningbrief' as any, label: 'Morning Brief', description: 'Open daily directives & protocol brief (home)', icon: '☀', category: 'actions', keywords: ['morning', 'brief', 'directives', 'daily', 'home', 'protocol', 'today'], isAction: true },
-  { id: '__visitpacket' as any, label: 'Doctor Visit Prep', description: 'Export visit packet (JSON / printable) from Bio-Resume', icon: '📋', category: 'actions', keywords: ['doctor', 'visit', 'packet', 'export', 'prep', 'bio resume', 'json', 'pdf', 'report', 'clinic'], isAction: true },
-  { id: '__quicklog' as any, label: 'Manual Vitals / Quick Log', description: 'Enter HR, HRV, sleep, steps (wearables coming later)', icon: '⚡', category: 'actions', keywords: ['log', 'vitals', 'quick log', 'quick', 'entry', 'record', 'track', 'hr', 'hrv', 'sleep', 'mood', 'energy', 'manual', 'steps'], isAction: true },
-  { id: '__connections' as any, label: 'Connections & Manual Vitals', description: 'Wearable status + manual vitals form', icon: '⬡', category: 'actions', keywords: ['connections', 'wearable', 'oura', 'whoop', 'apple', 'garmin', 'manual vitals', 'settings'], isAction: true },
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {

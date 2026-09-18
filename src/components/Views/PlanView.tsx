@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════ */
 /*  PlanView — 90-Day Tactical Roadmap                          */
 /*  Today's Plan + Transformation Progress                       */
@@ -51,9 +52,7 @@ interface BaselineMetric {
 function useSessionId(): string {
   const [id] = useState(() => {
     if (typeof window === 'undefined') return 'anon';
-    let sid = localStorage.getItem('vive-session-id');
-    if (!sid) { sid = crypto.randomUUID(); localStorage.setItem('vive-session-id', sid); }
-    return sid;
+    return getTwinSessionId();
   });
   return id;
 }

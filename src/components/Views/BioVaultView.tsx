@@ -78,7 +78,7 @@ const PrivacyBadge = React.memo(({ status }: { status: string }) => {
         border: `1px solid ${isSecure ? WARM.sageBorder : WARM.roseBorder}`,
       }}
     >
-      {isSecure ? '🔒' : '⚠️'} {isSecure ? 'Private & Secure' : 'Not Secured'}
+      {isSecure ? '🔒' : '⚠️'} {isSecure ? 'Account private' : 'Unmarked'}
     </span>
   );
 });
@@ -866,7 +866,7 @@ const BioVaultView = () => {
         >
           <span className="text-base">🔒</span>
           <span className="text-[12px]" style={{ color: WARM.textMuted }}>
-            Your data is encrypted and private — only you can see it
+            Account-private storage — not medical advice. We do not claim HIPAA certification.
           </span>
         </div>
       </div>

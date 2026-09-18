@@ -7,6 +7,7 @@ import {
   CartesianGrid, Legend, Area, AreaChart, ReferenceLine,
 } from 'recharts'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const C = {
   bg: '#0A0A0B',
@@ -40,13 +41,6 @@ const STAGE_COLORS = {
 }
 
 /* ── Helpers ── */
-function getSessionId() {
-  if (typeof window === 'undefined') return 'guest-user'
-  let id = localStorage.getItem('vive-session-id')
-  if (!id) { id = crypto.randomUUID(); localStorage.setItem('vive-session-id', id) }
-  return id
-}
-
 function scoreColor(score: number) {
   if (score >= 80) return C.green
   if (score >= 60) return C.orange
@@ -289,7 +283,7 @@ function SleepOptimizer({ correlations }: { correlations: any[] }) {
    ══════════════════════════════════════════════════════════════ */
 
 export default function SleepIntel() {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const data = useQuery(api.sleepIntel.getSleepIntel, { sessionId })
   const [range, setRange] = useState<'7d' | '30d'>('7d')
 

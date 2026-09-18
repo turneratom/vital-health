@@ -7,6 +7,7 @@ import SensorStatus from './SensorStatus'
 import BioVaultModal from './BioVaultModal'
 import SquadPresence, { RedlineNotification } from './SquadPresence'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    TIME-TRAVEL HUD + COMMAND SUMMARY + SENSOR STATUS
    
@@ -67,7 +68,7 @@ export default function TimeTravelHUD({ onTemporalOffset, hudVisible: externalVi
   // Internal HUD visibility state (used when no external control)
   const [internalHudVisible, setInternalHudVisible] = useState(true)
   const sliderRef = useRef<HTMLDivElement>(null)
-  const sessionId = typeof window !== 'undefined' ? localStorage.getItem('vive-session-id') || 'guest-user' : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   // Resolve whether HUD is visible — prefer external prop, fallback to internal
   const hudVisible = externalVisible !== undefined ? externalVisible : internalHudVisible

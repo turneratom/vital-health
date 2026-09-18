@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from '
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════
    PROTOCOL SIDEBAR — "What Do I Do Today?" Command Panel
    
@@ -80,10 +81,6 @@ const WINDOW_CONFIG: Record<string, {
     glowColor: 'rgba(124,182,142,0.12)',
     timeRange: '18:00 — 22:00',
   },
-}
-
-function getSessionId(): string {
-  try { return localStorage.getItem('vive-session-id') || 'guest-user' } catch { return 'guest-user' }
 }
 
 /* ── System Synced Ripple — Full-screen canvas animation ── */
@@ -406,7 +403,7 @@ function MiniProgressRing({ percentage, size = 44 }: { percentage: number; size?
    ══════════════════════════════════════════════════════════════ */
 
 export default function ProtocolSidebar() {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const [isOpen, setIsOpen] = useState(false)
   const [expandedWindow, setExpandedWindow] = useState<string | null>(null)
   const [syncTrigger, setSyncTrigger] = useState(0)

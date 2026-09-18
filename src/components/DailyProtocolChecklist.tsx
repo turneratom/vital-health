@@ -1,3 +1,4 @@
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════════
    DAILY PROTOCOL CHECKLIST — Center Column
    
@@ -342,9 +343,7 @@ function ProtocolRow({
    ══════════════════════════════════════════════════════════════════ */
 
 export default function DailyProtocolChecklist() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const protocolStatus = useQuery(api.protocols.getTodayProtocolStatus, { sessionId })
   const toggleCompletion = useMutation(api.protocols.toggleCompletion)

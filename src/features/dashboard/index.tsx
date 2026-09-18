@@ -14,6 +14,7 @@ import { InsightFeed } from '@/components/InsightCard';
 import { ProgressIntelligence } from '@/components/ProgressIntelligence';
 import { BiometricDetail, getMetricKeyForSource } from '@/components/BiometricDetail';
 import { DataVerifiedBadge, LabUpload } from '@/components/LabUpload';
+import { DemoDisclaimerBanner } from '@/components/DemoDisclaimerBanner';
 
 /* ══════════════════════════════════════════════════════════════
    VIVE 4.0 — Redesigned Dashboard
@@ -211,6 +212,7 @@ const Dashboard = ({ onOpenBriefing }: DashboardViewProps) => {
           window.dispatchEvent(new CustomEvent('vive-start-protocol', { detail: { protocol } }));
         }}
       />
+      <DemoDisclaimerBanner />
       <div
         className="font-mono px-5 pb-8 max-w-[640px] mx-auto"
         style={{

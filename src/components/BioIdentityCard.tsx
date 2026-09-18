@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    BIO-IDENTITY CARD — Premium Lab-Report Style Share Card
    
@@ -39,10 +40,6 @@ interface SystemData {
   thermal: ThermalState
   icon: string
   trend: string
-}
-
-function getSessionId(): string {
-  try { return localStorage.getItem('vive-session-id') || 'guest-user' } catch { return 'guest-user' }
 }
 
 /* ── Rounded rect helper ── */
@@ -462,7 +459,7 @@ export default function BioIdentityCard({ isOpen, onClose }: {
   const [status, setStatus] = useState<'generating' | 'ready' | 'sharing' | 'copied'>('generating')
   const [imageUrl, setImageUrl] = useState<string | null>(null)
 
-  const sessionId = getSessionId()
+  const sessionId = getTwinSessionId()
   const bioIdentity = useQuery(api.bioIdentity.getBioIdentityState, { sessionId })
 
   useEffect(() => {

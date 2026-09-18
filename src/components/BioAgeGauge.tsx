@@ -3,6 +3,7 @@ import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const C = {
   bg: '#0A0A0B',
@@ -339,9 +340,7 @@ function AgeTrendSparkline({ history }: { history: Array<{ date: string; viveAge
    ══════════════════════════════════════════════════════════════ */
 
 export default function BioAgeGauge() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const viveAge = useQuery(api.bioAgeAlgorithm.computeViveAge, { sessionId })
   const snapshotMutation = useMutation(api.bioAgeAlgorithm.snapshotViveAge)

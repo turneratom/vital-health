@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Constants ── */
 const CYAN = '#00F2FF';
 const PURPLE = '#BF5AF2';
@@ -255,7 +256,7 @@ export function ViveConcierge({ ghostMode, planningMode = false, planningDate }:
   // Fetch Bio-Vault data from Shipper Cloud
   let bioVaultData: any = null;
   try {
-    const sessionId = typeof window !== 'undefined' ? (sessionStorage.getItem('vive-session-id') || 'default') : 'default';
+    const sessionId = typeof window !== 'undefined' ? (getTwinSessionId()) : 'default';
     bioVaultData = useQuery(api.queries.getBioVaultBySession, { sessionId });
   } catch {
     // Convex not connected — use defaults

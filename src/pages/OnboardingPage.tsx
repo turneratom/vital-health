@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════
    DESIGN TOKENS — Command Center Aesthetic
    ══════════════════════════════════════════════════════════════ */
@@ -1021,9 +1022,7 @@ export default function OnboardingPage() {
   const upsertInduction = useMutation(api.mutations.upsertInductionProfile);
   const deployProtocolTemplate = useMutation(api.mutations.deployProtocolTemplate);
 
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user';
+  const sessionId = getTwinSessionId();
 
   const toggleSupplement = useCallback((id: string) => {
     setState((prev) => ({

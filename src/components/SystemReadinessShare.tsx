@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    SYSTEM READINESS SHARE — "Super-Soldier" Bio-Readout Graphic
    
@@ -74,10 +75,6 @@ function scoreToThermal(score: number): ThermalState {
   if (score >= 40) return 'warm'
   if (score >= 20) return 'hot'
   return 'critical'
-}
-
-function getSessionId(): string {
-  try { return localStorage.getItem('vive-session-id') || 'guest-user' } catch { return 'guest-user' }
 }
 
 /* ── Body silhouette path data (simplified anatomical outline) ── */
@@ -878,7 +875,7 @@ interface SystemReadinessShareProps {
 }
 
 export default function SystemReadinessShare({ isOpen, onClose }: SystemReadinessShareProps) {
-  const sessionId = getSessionId()
+  const sessionId = getTwinSessionId()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [format, setFormat] = useState<ShareFormat>('story')
   const [rendered, setRendered] = useState(false)

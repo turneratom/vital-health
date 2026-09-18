@@ -4,6 +4,7 @@ import { api } from '../../convex/_generated/api'
 import { useBioContext } from '@/hooks/useBioContext'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const C = {
   bg: '#0A0A0B',
@@ -28,15 +29,6 @@ const C = {
 }
 
 /* ── Session ID ── */
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'default'
-  try {
-    let id = localStorage.getItem('vive-session-id')
-    if (!id) { id = crypto.randomUUID(); localStorage.setItem('vive-session-id', id) }
-    return id
-  } catch { return 'default' }
-}
-
 /* ═══════════════════════════════════════════════════════════════
    ANIMATED RING — SVG arc with glow + animated stroke
    ═══════════════════════════════════════════════════════════════ */
@@ -336,7 +328,7 @@ function MiniStat({ icon, label, value, color }: {
    BIO-DASHBOARD — Three-Ring Home Screen
    ═══════════════════════════════════════════════════════════════ */
 export default function BioDashboard() {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const rings = useQuery(api.bioDashboard.getDashboardRings, { sessionId })
   const bioContext = useBioContext()
   const [pulseFrame, setPulseFrame] = useState(0)

@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import AIStatHeader from '../Journal/AIStatHeader';
 import { useAIFoodParser, useAIExerciseParser } from '../../lib/useAI';
 import type { ParsedFood, ParsedExercise } from '../../lib/useAI';
+import { getTwinSessionId } from '@/lib/twinSession'
+
 
 /* ═══════════════════════════════════════════════════════ */
 /* ── VIVE 4.0 — Daily Ledger (AI-Powered, Frictionless) ── */
@@ -770,15 +772,7 @@ function deriveExerciseTag(entry: { duration?: number; calories: number; exercis
 /* ═══════════════════════════════════════════════════════ */
 const JournalView: React.FC = () => {
   /* ── Session ID (stable across renders) ── */
-  const [sessionId] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('vive_session_id');
-      if (stored) return stored;
-      const sid = sessionStorage.getItem('vive-session-id');
-      if (sid) return sid;
-    }
-    return crypto.randomUUID();
-  });
+  const [sessionId] = useState(() => getTwinSessionId());
 
   /* ── Date state ── */
   const today = useMemo(() => {

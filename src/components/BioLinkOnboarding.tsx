@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    BIO-LINK ONBOARDING — Terminal-Style Quick Calibration
    
@@ -92,7 +93,7 @@ export default function BioLinkOnboarding({ isOpen, onComplete }: BioLinkOnboard
   const saveFirstSync = useMutation(api.firstSync.saveFirstSyncBiomarkers)
   const upsertPresence = useMutation(api.mutations.upsertPresence)
 
-  const sessionId = typeof window !== 'undefined' ? localStorage.getItem('vive-session-id') || 'guest-user' : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const addTerminalLine = useCallback((line: string) => {
     setTerminalLines(prev => [...prev, line])

@@ -5,6 +5,8 @@ import { api } from "../../../convex/_generated/api";
 import { useGhostMode } from "@/components/Presence/usePresenceState";
 import { MilestoneGallery } from "./MilestoneGallery";
 import { VisualProgressCard } from "@/components/VisualProgressCard";
+import { getTwinSessionId } from '@/lib/twinSession'
+
 
 /* ── Generate 30-day historical data ── */
 function generate30DayData(base: number, variance: number, trend: number = 0): number[] {
@@ -666,17 +668,7 @@ export function ProgressView({ mounted }: { mounted?: boolean }) {
   };
 
   /* Pull Bio-Vault data for baselines */
-  const sessionId = useMemo(() => {
-    if (typeof window !== "undefined") {
-      let id = window.sessionStorage.getItem("vive-session-id");
-      if (!id) {
-        id = crypto.randomUUID();
-        window.sessionStorage.setItem("vive-session-id", id);
-      }
-      return id;
-    }
-    return "default";
-  }, []);
+  const sessionId = useMemo(() => getTwinSessionId(), []);
 
   const bioVault = useQuery(api.queries.getBioVaultBySession, { sessionId });
   const foodLogs = useQuery(api.queries.listFoodLogs);

@@ -3,6 +3,8 @@ import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useGhostMode } from "@/components/Presence/usePresenceState";
 import { calculateBiologicalVelocity } from "@/lib/analyticsUtils";
+import { getTwinSessionId } from '@/lib/twinSession'
+
 
 /* ── Standardized Color System ──
    Green  (#30D158) = Good / Improving
@@ -11,16 +13,6 @@ import { calculateBiologicalVelocity } from "@/lib/analyticsUtils";
 */
 
 /* ── Helpers ── */
-function getSessionId(): string {
-  if (typeof window === "undefined") return "default";
-  let id = sessionStorage.getItem("vive-session-id");
-  if (!id) {
-    id = crypto.randomUUID();
-    sessionStorage.setItem("vive-session-id", id);
-  }
-  return id;
-}
-
 function getStatusColor(trend: "up" | "down" | "flat"): string {
   if (trend === "up") return "#30D158";
   if (trend === "flat") return "#FFD60A";
@@ -735,7 +727,7 @@ function BiomarkerFlagStrip({ flags, ghostMode }: { flags: BiomarkerFlag[]; ghos
 
 export function InsightBridge({ compact = false }: { compact?: boolean } = {}) {
   const ghostMode = useGhostMode();
-  const sessionId = useMemo(getSessionId, []);
+  const sessionId = useMemo(() => getTwinSessionId(), []);
   const [activeTrend, setActiveTrend] = useState<"journal" | "vitality" | null>(null);
   const journalAnchorRef = useRef<HTMLDivElement>(null);
   const vitalityAnchorRef = useRef<HTMLDivElement>(null);

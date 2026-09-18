@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useAction, useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const C = {
   bg: '#0A0A0B',
@@ -131,7 +132,7 @@ function WaveformVisualizer({ isRecording }: { isRecording: boolean }) {
 
 /* ── Main Component ── */
 export default function QuickCheckInFAB() {
-  const sessionId = typeof window !== 'undefined' ? localStorage.getItem('vive-session-id') || 'guest-user' : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const [isOpen, setIsOpen] = useState(false)
   const [phase, setPhase] = useState<'idle' | 'recording' | 'analyzing' | 'results'>('idle')

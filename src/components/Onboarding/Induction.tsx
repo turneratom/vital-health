@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAction, useMutation } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════
    VIVE 4.0 — INSTANT INDUCTION DROP ZONE
    Zero-form onboarding: Drop health data → AI parses → BioVault populated → Protocol ready
@@ -298,8 +299,7 @@ export default function Induction({ onComplete }: InductionProps) {
   const handleDeploy = useCallback(async () => {
     if (!profile || !selectedGoal) return;
     setPhase('deploying');
-    const sessionId = sessionStorage.getItem('vive-session-id') || crypto.randomUUID();
-    sessionStorage.setItem('vive-session-id', sessionId);
+    const sessionId = getTwinSessionId();
 
     try {
       const bm = profile.biomarkers;
@@ -357,8 +357,7 @@ export default function Induction({ onComplete }: InductionProps) {
 
   /* ── Skip onboarding (minimal data) ── */
   const handleSkip = useCallback(() => {
-    const sessionId = sessionStorage.getItem('vive-session-id') || crypto.randomUUID();
-    sessionStorage.setItem('vive-session-id', sessionId);
+    const sessionId = getTwinSessionId();
     setPhase('complete');
     setTimeout(() => {
       onComplete({

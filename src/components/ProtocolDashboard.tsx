@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════
    PROTOCOL DASHBOARD
    
@@ -42,19 +43,6 @@ const TIME_GROUPS = [
 ];
 
 type CategoryFilter = 'all' | string;
-
-function getSessionId(): string {
-  try {
-    let id = localStorage.getItem('vive-session-id');
-    if (!id) {
-      id = 'guest-' + crypto.randomUUID().slice(0, 8);
-      localStorage.setItem('vive-session-id', id);
-    }
-    return id;
-  } catch {
-    return 'guest-user';
-  }
-}
 
 /* ── Circular progress for the header ── */
 function HeaderProgress({ done, total, percentage }: { done: number; total: number; percentage: number }) {
@@ -241,7 +229,7 @@ function ProtocolCard({
 
 /* ── Main Protocol Dashboard ── */
 export default function ProtocolDashboard() {
-  const sessionId = useMemo(() => getSessionId(), []);
+  const sessionId = useMemo(() => getTwinSessionId(), []);
   const [filter, setFilter] = useState<CategoryFilter>('all');
   const [togglingId, setTogglingId] = useState<string | null>(null);
 

@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    PERFORMANCE LEADERBOARD — Elite Score Rankings
    Ranks squad members by Elite Performance Score (0-100).
@@ -530,9 +531,7 @@ function YourPositionCard({ yourData, aboveData }: { yourData: RowData; aboveDat
    ═══════════════════════════════════════════════════════════════ */
 export default function PerformanceLeaderboard() {
   const [competitive, setCompetitive] = useState(false)
-  const sessionId = typeof window !== 'undefined'
-    ? (localStorage.getItem('vive-session-id') || localStorage.getItem('vive_session_id') || 'guest-user')
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   // Fetch real data from Convex
   const eliteScores = useQuery(api.eliteScore.listAll) ?? []

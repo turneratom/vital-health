@@ -9,6 +9,7 @@ import {
   type PhysicalProfile,
 } from '@/lib/intelligence/BioLogic';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════════
    CURRENT FOCUS — Metric Progress Ring
    
@@ -129,16 +130,6 @@ const BIOMARKER_IDEALS: BiomarkerIdeal[] = [
 ];
 
 /* ── Session helper ── */
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'ssr';
-  let id = localStorage.getItem('vive-session-id');
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem('vive-session-id', id);
-  }
-  return id;
-}
-
 /* ── Calculate progress toward ideal ── */
 function calculateProgress(
   currentValue: number,
@@ -481,7 +472,7 @@ function ProgressRingCanvas({
    ══════════════════════════════════════════════════════════════════ */
 
 export default function CurrentFocus() {
-  const sessionId = useMemo(() => getSessionId(), []);
+  const sessionId = useMemo(() => getTwinSessionId(), []);
 
   // Fetch lab results and physical baseline
   const labResults = useQuery(api.queries.getRecentLabResults, { sessionId });

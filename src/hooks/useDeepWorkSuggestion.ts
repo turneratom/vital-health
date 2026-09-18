@@ -4,6 +4,7 @@ import { api } from '../../convex/_generated/api';
 import { normalizeHrvScore, normalizeSleepScore } from '@/lib/bioSyncLogic';
 import { getDeepWorkActive } from '@/components/layout/HUDOverlay';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════ */
 /*  DEEP WORK SUGGESTION ENGINE                                   */
 /*                                                                */
@@ -122,9 +123,7 @@ export function useDeepWorkSuggestion(): {
 } {
   const [suggestion, setSuggestion] = useState<DeepWorkSuggestion | null>(null);
   const evaluatedRef = useRef(false);
-  const sessionId = typeof window !== 'undefined'
-    ? (localStorage.getItem('vive-session-id') || 'guest-user')
-    : 'guest-user';
+  const sessionId = getTwinSessionId();
 
   // Pull today's vitals from the backend
   const vitals = useQuery(api.vitalsData.getVitalsTimeSeries, { sessionId });

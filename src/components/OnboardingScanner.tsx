@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useMutation, useAction } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════
    ONBOARDING SCANNER — 4-Step Interactive Bio-Initialization
    
@@ -964,7 +965,7 @@ export default function OnboardingScanner({ onComplete }: { onComplete: () => vo
 
   const handleComplete = useCallback(async () => {
     try {
-      const sessionId = localStorage.getItem('vive-session-id') || 'guest-user';
+      const sessionId = getTwinSessionId();
       // Save vitals
       if (bioData.age && bioData.weight && bioData.gender) {
         await upsertVitals({

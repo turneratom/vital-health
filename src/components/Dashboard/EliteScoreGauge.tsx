@@ -8,6 +8,7 @@ import { api } from "../../../convex/_generated/api";
 import { useAccessTier } from "@/components/AccessController";
 import { calculateBiologicalAgeOffset, type BioAgeResult } from "@/lib/bioSyncLogic";
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Error Boundary ── */
 class ScoreErrorBoundary extends Component<{ children: ReactNode; fallback: ReactNode }, { hasError: boolean }> {
   state = { hasError: false };
@@ -698,16 +699,6 @@ function useBioAgeOffset(sessionId: string): BioAgeResult | null {
   }, [bioVaultRaw, userVitals]);
 }
 
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'default';
-  let id = sessionStorage.getItem('vive-session-id');
-  if (!id) {
-    id = crypto.randomUUID();
-    sessionStorage.setItem('vive-session-id', id);
-  }
-  return id;
-}
-
 /* ── Main inner component ── */
 function EliteScoreGaugeInner({
   foodLogCount,
@@ -723,7 +714,7 @@ function EliteScoreGaugeInner({
   const ghostMode = useGhostMode();
   const highlighted = useProtocolHighlight();
   const { isElite } = useAccessTier();
-  const sessionId = useMemo(() => getSessionId(), []);
+  const sessionId = useMemo(() => getTwinSessionId(), []);
   const bioAge = useBioAgeOffset(sessionId);
 
   const score = calculateLocalScore(foodLogCount, activityLogCount, currentHrv, hrvHistory7d);

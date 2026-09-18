@@ -3,6 +3,7 @@ import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    BIOLOGICAL TWIN — Lifetime Trajectory Visualization
    
@@ -41,14 +42,6 @@ const T = {
   purple: '#A78BFA',
   border: 'rgba(255,255,255,0.05)',
   borderBlue: 'rgba(59,130,246,0.12)',
-}
-
-function getSessionId(): string {
-  try {
-    let id = localStorage.getItem('vive-session-id')
-    if (!id) { id = `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`; localStorage.setItem('vive-session-id', id) }
-    return id
-  } catch { return 'guest-user' }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -782,7 +775,7 @@ function PersistentCriticalAlerts() {
    MAIN COMPONENT — BiologicalTwin
    ═══════════════════════════════════════════════════════════════ */
 export default function BiologicalTwin() {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const data = useQuery(api.biologicalTwin.getBiologicalTwin, { sessionId })
   const [expanded, setExpanded] = useState(false)
 

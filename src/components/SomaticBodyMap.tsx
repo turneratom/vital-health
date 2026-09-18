@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const T = {
   bg: '#0A0A0B',
@@ -196,7 +197,7 @@ export default function SomaticBodyMap({ stabilizedRegions = new Set(), protocol
   const pulseColor = isCriticalStrain ? '#FF4444' : isStrained ? T.amber : (isFlowState || isFullyComplete) ? T.accent : T.blue
   const pulseGlow = isCriticalStrain ? 'rgba(255,68,68,0.25)' : isStrained ? T.amberGlow : (isFlowState || isFullyComplete) ? T.accentGlow : T.blueGlow
 
-  const sessionId = typeof window !== 'undefined' ? localStorage.getItem('vive-session-id') || 'guest-user' : 'guest-user'
+  const sessionId = getTwinSessionId()
   const bodyData = useQuery(api.somaticCorrelation.getBodyMapData, { sessionId })
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
   const [showInsightPanel, setShowInsightPanel] = useState(false)

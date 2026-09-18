@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    READINESS REPORT — "Confidential Medical File" Style Snapshot
    
@@ -27,10 +28,6 @@ const THERMAL_HEX: Record<ThermalState, string> = {
 const THERMAL_LABEL: Record<ThermalState, string> = {
   cold: 'OPTIMAL', cool: 'GOOD', neutral: 'BASELINE',
   warm: 'ELEVATED', hot: 'WARNING', critical: 'CRITICAL',
-}
-
-function getSessionId(): string {
-  try { return localStorage.getItem('vive-session-id') || 'guest-user' } catch { return 'guest-user' }
 }
 
 function scoreToThermal(score: number): ThermalState {
@@ -559,7 +556,7 @@ interface ReadinessReportProps {
 }
 
 export default function ReadinessReport({ isOpen, onClose }: ReadinessReportProps) {
-  const sessionId = getSessionId()
+  const sessionId = getTwinSessionId()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const exportCanvasRef = useRef<HTMLCanvasElement>(null)
   const [phase, setPhase] = useState<'loading' | 'scanning' | 'ready'>('loading')

@@ -3,6 +3,7 @@ import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    PREDICTIVE FOOTER — "What's Next" Intelligence HUD
    
@@ -272,9 +273,7 @@ function ActionCard({ action, index, isExpanded, onToggle }: {
    ═══════════════════════════════════════════════════════════════ */
 
 export default function PredictiveFooter() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const data = useQuery(api.predictiveNext.getWhatsNext, { sessionId })
   const [isExpanded, setIsExpanded] = useState(false)

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════
    HUD PROTOCOL PROGRESS RING
    
@@ -10,14 +11,6 @@ import { api } from '../../../convex/_generated/api';
    today's protocol completion percentage. Pulses on completion,
    shows category breakdown on hover/tap.
    ══════════════════════════════════════════════════════════════ */
-
-function getSessionId(): string {
-  try {
-    return localStorage.getItem('vive-session-id') || 'guest-user';
-  } catch {
-    return 'guest-user';
-  }
-}
 
 const CATEGORY_COLORS: Record<string, string> = {
   supplement: '#C4A46C',
@@ -43,7 +36,7 @@ interface HUDProtocolRingProps {
 }
 
 export function HUDProtocolRing({ compact = false }: HUDProtocolRingProps) {
-  const sessionId = useMemo(() => getSessionId(), []);
+  const sessionId = useMemo(() => getTwinSessionId(), []);
   const protocolStatus = useQuery(api.protocols.getTodayProtocolStatus, { sessionId });
   const [showDetail, setShowDetail] = useState(false);
   const [prevDone, setPrevDone] = useState(0);

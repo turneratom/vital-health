@@ -3,6 +3,7 @@ import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 const CC = {
   bg: '#0A0A0B',
   surface: 'rgba(14,14,18,0.85)',
@@ -24,9 +25,7 @@ interface LowStockAlertProps {
 }
 
 export default function LowStockAlert({ onAlertStateChange }: LowStockAlertProps) {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const systemAlerts = useQuery(api.inventory.getSystemAlerts, { sessionId })
   const quickReorder = useMutation(api.inventory.quickReorder)
@@ -275,9 +274,7 @@ export default function LowStockAlert({ onAlertStateChange }: LowStockAlertProps
 
 // Hook for other components to check low-stock state
 export function useLowStockState() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
   const data = useQuery(api.inventory.getSystemAlerts, { sessionId })
   return {
     hasCritical: data?.hasCritical ?? false,

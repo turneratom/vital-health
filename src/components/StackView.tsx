@@ -10,6 +10,7 @@ import {
   type BioVaultData,
 } from '../../convex/supplementLogic'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const T = {
   bg: '#0A0A0B',
@@ -310,9 +311,7 @@ function StackCard({ stack, isOpen, onToggle }: {
    ══════════════════════════════════════════════════════════════ */
 
 export default function StackView() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const bioVault = useQuery(api.queries.getBioVaultBySession, { sessionId })
   const longevityData = useQuery(api.longevityScore.getLongevityScore, { sessionId })

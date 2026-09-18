@@ -101,7 +101,7 @@ const TIERS: TierDefinition[] = [
       { icon: '🔬', label: 'Advanced Lab Mapping', description: 'Deep biomarker analysis with age/sex-adjusted optimal zones and longitudinal tracking', gatedFeature: 'advanced-bio-analytics' },
       { icon: '⏳', label: 'Real-time Biological Tracking', description: 'Epigenetic age estimation, telomere tracking, and multi-biomarker aging algorithms', gatedFeature: 'biological-age-tracking' },
       { icon: '🧠', label: 'InsightBridge AI', description: 'AI-powered correlations between protocols, biomarkers, and wearable data', gatedFeature: 'insight-bridge' },
-      { icon: '🛡️', label: 'Bio-Vault', description: 'Encrypted storage for lab results, genetic data, and health records with full export', gatedFeature: 'bio-vault' },
+      { icon: '🛡️', label: 'Bio-Vault', description: 'Private storage for lab results, genetic data, and health records with full export (not HIPAA certified)', gatedFeature: 'bio-vault' },
       { icon: '🧬', label: 'DNA Insights', description: 'MTHFR, APOE4, COMT, and 200+ SNP analysis with protocol recommendations', gatedFeature: 'dna-insights' },
       { icon: '📋', label: 'Weekly Blueprint Report', description: 'Comprehensive weekly analysis with trend predictions and protocol adjustments', gatedFeature: 'weekly-report' },
       { icon: '🌐', label: 'Peer Network', description: 'Connect with high-performers, share protocols, and join accountability pods', gatedFeature: 'peer-network' },

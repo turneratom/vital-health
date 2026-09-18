@@ -1,3 +1,4 @@
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════════
    DAILY PROTOCOL WIDGET — Baseline-Driven Checklist
    
@@ -420,9 +421,7 @@ export default function DailyProtocolWidget() {
   const { vitals } = useBiometricSync()
 
   // Try to load physical baseline from Convex
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const physicalBaseline = useQuery(api.queries.getPhysicalBaseline, { sessionId })
 

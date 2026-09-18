@@ -15,6 +15,8 @@ import { PhysicalTransformation } from "@/components/PhysicalTransformation";
 import { BiometricAvatar } from "@/components/BiometricAvatar";
 import { FreemiumGate } from "@/components/FreemiumGate";
 import { MetricDeepDive } from "@/components/MetricDeepDive";
+import { getTwinSessionId } from '@/lib/twinSession'
+
 
 /* ══════════════════════════════════════════════ */
 /* ── Warm Earth-Tone Palette ──                 */
@@ -350,7 +352,7 @@ function VaultFAB({ ghostMode, onOpenBioVault }: { ghostMode: boolean; onOpenBio
 export function VitalsView({ mounted, onOpenBioVault }: { mounted?: boolean; onOpenBioVault?: () => void }) {
   const ghostMode = useGhostMode();
   const [deepDiveMetric, setDeepDiveMetric] = useState<string | null>(null);
-  const sessionId = typeof window !== "undefined" ? localStorage.getItem("vive_session_id") || "" : "";
+  const sessionId = getTwinSessionId();
   const perf = usePerformanceScore(sessionId);
 
   const vitalsData = useQuery(

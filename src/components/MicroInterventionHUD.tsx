@@ -4,6 +4,7 @@ import { api } from '../../convex/_generated/api'
 import { motion, AnimatePresence } from 'framer-motion'
 import SomaticFeedback from './SomaticFeedback'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════
    DAILY FOCUS OVERLAY — with Optimistic Updates
    
@@ -256,9 +257,7 @@ function ActiveInterventionPill({ intervention }: {
    ══════════════════════════════════════════════════════════════ */
 
 export default function MicroInterventionHUD() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   let driftDataRaw: any = undefined
   let dynamicDataRaw: any = undefined

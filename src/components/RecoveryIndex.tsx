@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const CC = {
   bg: '#0A0A0B',
@@ -197,7 +198,7 @@ function RecommendationCard({ rec, index }: {
 }
 
 export default function RecoveryIndex() {
-  const sessionId = typeof window !== 'undefined' ? localStorage.getItem('vive-session-id') || 'guest-user' : 'guest-user'
+  const sessionId = getTwinSessionId()
   const data = useQuery(api.recoveryIndex.getRecoveryIndex, { sessionId })
   const [expanded, setExpanded] = useState(false)
 

@@ -9,6 +9,7 @@ import {
   type VelocityAlert,
 } from '@/utils/LongevityVelocity'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── HUD Design Tokens ── */
 const T = {
   bg: '#0A0A0B',
@@ -33,14 +34,6 @@ const T = {
   purple: '#A78BFA',
   border: 'rgba(255,255,255,0.05)',
   borderBlue: 'rgba(59,130,246,0.12)',
-}
-
-function getSessionId(): string {
-  try {
-    let id = localStorage.getItem('vive-session-id')
-    if (!id) { id = `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`; localStorage.setItem('vive-session-id', id) }
-    return id
-  } catch { return 'guest-user' }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -470,7 +463,7 @@ function OptimizationOverlay({ velocity, onDismiss }: {
    ═══════════════════════════════════════════════════════════════ */
 
 export default function VelocityEngine({ compact = false }: { compact?: boolean }) {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const [showOptimization, setShowOptimization] = useState(false)
   const [dismissed, setDismissed] = useState(false)
   const [expanded, setExpanded] = useState(false)

@@ -3,6 +3,7 @@ import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useBioPings } from '@/hooks/useBioPings';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const C = {
   bg: 'rgba(10,10,11,0.92)',
@@ -42,9 +43,7 @@ function useNeuralSyncLatency() {
 
 /* ── Protocol Adherence from dashboard data ── */
 function useProtocolAdherence() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user';
+  const sessionId = getTwinSessionId();
 
   const dashData = useQuery(api.dashboardData.getLast24hDashboardData, { sessionId });
 
@@ -66,9 +65,7 @@ function useProtocolAdherence() {
 
 /* ── Biological Integrity — composite from HRV, recovery, macros ── */
 function useBiologicalIntegrity() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user';
+  const sessionId = getTwinSessionId();
 
   const dashData = useQuery(api.dashboardData.getLast24hDashboardData, { sessionId });
 

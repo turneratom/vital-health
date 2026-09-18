@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const CC = {
   bg: '#0A0A0B',
@@ -294,9 +295,7 @@ function InterventionCard({ intervention, index, onAccept }: {
    ══════════════════════════════════════════════════════════════ */
 
 export default function ProtocolAdjustmentAlert() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const alert = useQuery(api.predictiveRecovery.getPredictiveRecoveryAlert, { sessionId })
   const dismissAlert = useMutation(api.predictiveRecovery.dismissPredictiveAlert)

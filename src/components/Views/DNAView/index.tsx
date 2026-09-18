@@ -426,7 +426,7 @@ function DNAView({ mounted }: { mounted?: boolean }) {
                   className="text-[11px] leading-relaxed max-w-sm mx-auto"
                   style={{ color: `${neon}0.25)` }}
                 >
-                  Your genetic data is encrypted and stored locally. These insights are based on peer-reviewed research and should complement — not replace — professional medical advice.
+                  Genetic insights are educational and stored in your account when provided. They complement — not replace — professional medical advice. Not HIPAA certified.
                 </p>
                 <div className="flex items-center justify-center gap-2 mt-3">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none">

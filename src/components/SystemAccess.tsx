@@ -481,6 +481,22 @@ export default function SystemAccess({ mode: initialMode = 'signin' }: SystemAcc
               ? 'New operator? Initialize Bio-Signature →'
               : 'Existing operator? Access System →'}
           </button>
+
+          <button
+            type="button"
+            onClick={() => navigate({ to: '/' })}
+            style={{
+              width: '100%', marginTop: 12, padding: '12px 0',
+              background: 'rgba(0,255,204,0.04)',
+              border: '1px solid rgba(0,255,204,0.18)',
+              borderRadius: 10, color: V.accent,
+              fontSize: 10, fontFamily: "'Inter', system-ui, sans-serif",
+              fontWeight: 600, letterSpacing: '0.1em',
+              cursor: 'pointer', textTransform: 'uppercase',
+            }}
+          >
+            Continue as guest →
+          </button>
         </div>
 
         {/* Footer */}
@@ -493,13 +509,13 @@ export default function SystemAccess({ mode: initialMode = 'signin' }: SystemAcc
             fontSize: 8, fontFamily: 'monospace', letterSpacing: '0.2em',
             color: V.textTer, fontWeight: 500,
           }}>
-            LONGEVITY OS v4.0 · ENCRYPTED · HIPAA-GRADE
+            LONGEVITY OS v4.0 · PRIVATE SESSION · NOT HIPAA CERTIFIED
           </div>
           <div style={{
             fontSize: 8, fontFamily: 'monospace', letterSpacing: '0.15em',
             color: 'rgba(255,255,255,0.12)', marginTop: 6,
           }}>
-            Your biological data never leaves your vault
+            Personal twin prototype — not medical advice. Data stays in your account.
           </div>
         </div>
       </div>

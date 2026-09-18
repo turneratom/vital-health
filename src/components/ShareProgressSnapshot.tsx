@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    SHARE PROGRESS SNAPSHOT — Viral Growth Engine
    
@@ -28,12 +29,6 @@ const T = {
   gold: '#FFD700',
   border: 'rgba(255,255,255,0.05)',
   borderBlue: 'rgba(59,130,246,0.12)',
-}
-
-function getSessionId(): string {
-  try {
-    return localStorage.getItem('vive-session-id') || 'guest-user'
-  } catch { return 'guest-user' }
 }
 
 /* ── Shareable Card Renderer ── */
@@ -318,7 +313,7 @@ function ShareCard({ data, onClose }: {
 
 /* ── Share Button (embedded in BiologicalTwin) ── */
 export function ShareProgressButton() {
-  const sessionId = getSessionId()
+  const sessionId = getTwinSessionId()
   const data = useQuery(api.biologicalTwin.getBiologicalTwin, { sessionId })
   const [showCard, setShowCard] = useState(false)
 

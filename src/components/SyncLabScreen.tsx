@@ -183,7 +183,7 @@ export function SyncLabScreen({ onContinue, onBack }: SyncLabScreenProps) {
               className="text-[9px] font-mono uppercase tracking-[0.2em]"
               style={{ color: 'rgba(0,240,255,0.5)' }}
             >
-              Encrypted &bull; Zero-Knowledge
+              Private by default
             </span>
             <ShieldIcon />
           </div>
@@ -199,8 +199,8 @@ export function SyncLabScreen({ onContinue, onBack }: SyncLabScreenProps) {
             className="text-[12px] leading-relaxed max-w-xs"
             style={{ color: 'rgba(255,255,255,0.35)' }}
           >
-            Connect your health data to unlock personalized protocols.
-            Your data is encrypted end-to-end and never shared.
+            Wearable sync is coming later. Prefer Manual Vitals or paste labs into Bio-Vault.
+            Your account data is private — we do not claim end-to-end encryption or HIPAA certification.
           </p>
         </div>
       </div>
@@ -222,8 +222,8 @@ export function SyncLabScreen({ onContinue, onBack }: SyncLabScreenProps) {
             Privacy &amp; Security
           </span>
           <span className="text-[10px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.3)' }}>
-            All biometric data is processed on-device. Vive uses differential privacy
-            to ensure your raw health records are never exposed.
+            Prototype privacy: account-scoped storage on Convex. Not on-device-only,
+            not differential privacy, and not HIPAA certified. Not medical advice.
           </span>
         </div>
       </motion.div>

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useAction, useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    BIOMARKER INGESTION — HUD Upload + Somatic Body Glow
    
@@ -117,9 +118,7 @@ async function extractText(file: File): Promise<string> {
 }
 
 export default function BiomarkerIngestion() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const parseAction = useAction(api.labParser.parseAndIngestLabResults)
   const labSummary = useQuery(api.labParser.getLatestLabSummary, { sessionId })

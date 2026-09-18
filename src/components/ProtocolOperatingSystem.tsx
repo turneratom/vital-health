@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
+import { getTwinSessionId } from '@/lib/twinSession'
 import { motion, AnimatePresence } from 'framer-motion'
 
 /* ═══════════════════════════════════════════════════════════════
@@ -274,50 +275,88 @@ function CategoryCard({ category, total, completed, adherence, biomarker, bioVal
 
 /* ── Main Protocol Operating System Component ── */
 export default function ProtocolOperatingSystem() {
-  const sessionId = typeof window !== 'undefined' ? localStorage.getItem('vive-session-id') || 'guest-user' : 'guest-user'
+  const sessionId = getTwinSessionId()
 
-  // Real Data Subscriptions
-  const systemStatus = useQuery(api.queries.getSystemStatus, { sessionId })
-  const readinessData = useQuery(api.queries.getReadinessHeatmapData, { sessionId })
+  const bioMap = useQuery(api.protocols.getBiomarkerProtocolMap, { sessionId })
+  const adherence30 = useQuery(api.protocols.getAdherenceHistory30d, { sessionId })
+  const activeProtocols = useQuery(api.protocols.getActiveProtocols, { sessionId })
   const toggleCompletion = useMutation(api.mutations.toggleProtocolCompletion)
+  const seedDefaults = useMutation(api.protocols.seedDefaults)
 
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
+  const [seeding, setSeeding] = useState(false)
+  const seededRef = useRef(false)
 
-  // Derive component state from real data
-  const todayScore = (systemStatus as any)?.user?.percentage ?? 0
-  const avg30d = (readinessData as any)?.summary?.avgCompletion ?? 0
-  const streak = (readinessData as any)?.summary?.streakDays ?? 0
+  // Auto-seed starter stack once when twin has zero protocols (personal log scaffolding — not clinical advice)
+  useEffect(() => {
+    if (seededRef.current || seeding) return
+    if (activeProtocols === undefined) return
+    if (Array.isArray(activeProtocols) && activeProtocols.length > 0) {
+      seededRef.current = true
+      return
+    }
+    seededRef.current = true
+    setSeeding(true)
+    seedDefaults({ sessionId })
+      .catch(() => { /* ignore */ })
+      .finally(() => setSeeding(false))
+  }, [activeProtocols, sessionId, seedDefaults, seeding])
+
+  const categories = useMemo(() => {
+    const cats = bioMap?.categories ?? []
+    return cats.map((c: any) => ({
+      category: c.category,
+      total: c.total ?? 0,
+      completed: c.completed ?? 0,
+      adherence: c.adherence ?? 0,
+      biomarker: c.biomarker ?? c.category,
+      bioValue: c.bioValue ?? null,
+      bioUnit: c.bioUnit ?? '',
+      bioOptimal: c.bioOptimal ?? '—',
+      bioStatus: c.bioStatus ?? 'unknown',
+    }))
+  }, [bioMap])
+
+  const protocols = useMemo(() => {
+    const mappings = bioMap?.mappings ?? []
+    if (mappings.length > 0) {
+      return mappings.map((m: any) => ({
+        _id: m.protocolId,
+        name: m.protocolName,
+        icon: m.protocolIcon ?? '•',
+        category: m.category,
+        completed: !!m.completed,
+        timeOfDay: '',
+      }))
+    }
+    // Fallback from active protocols list
+    return (activeProtocols ?? []).map((p: any) => ({
+      _id: p._id,
+      name: p.name,
+      icon: p.icon ?? '•',
+      category: p.category,
+      completed: false,
+      timeOfDay: p.timeOfDay ?? '',
+    }))
+  }, [bioMap, activeProtocols])
+
+  const protocolStatus = useMemo(() => ({
+    done: categories.reduce((s: number, c: any) => s + c.completed, 0),
+    total: categories.reduce((s: number, c: any) => s + c.total, 0),
+  }), [categories])
+
+  const todayScore = protocolStatus.total > 0
+    ? Math.round((protocolStatus.done / protocolStatus.total) * 100)
+    : (adherence30 as any)?.average ?? 0
+
+  const avg30d = (adherence30 as any)?.average ?? 0
+  const streak = (adherence30 as any)?.streak ?? 0
   const trendData: { dateKey: string; adherencePercent: number }[] =
-    ((readinessData as any)?.days ?? []).map((d: any) => ({
+    ((adherence30 as any)?.days ?? []).map((d: any) => ({
       dateKey: d.dateKey ?? d.date ?? '',
       adherencePercent: d.adherencePercent ?? d.completion ?? d.completionPercent ?? 0,
     }))
 
-  // Transform category data for the UI
-  const categories = useMemo(() => {
-    const cats = (systemStatus as any)?.categories
-    if (!cats) return []
-    return Object.entries(cats).map(([name, stats]: any) => ({
-      category: name,
-      total: stats.total,
-      completed: stats.done,
-      adherence: stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0,
-      biomarker: name === 'supplement' ? 'Vitamins' : name,
-      bioValue: null,
-      bioUnit: '',
-      bioOptimal: 'Active',
-      bioStatus: stats.total > 0 && stats.done === stats.total ? 'optimal' : 'suboptimal',
-    }))
-  }, [systemStatus])
-
-  const protocolStatus = useMemo(() => ({
-    done: categories.reduce((s, c) => s + c.completed, 0),
-    total: categories.reduce((s, c) => s + c.total, 0),
-  }), [categories])
-
-  const protocols: any[] = []
-
-  // Trend direction
   const trendDir = useMemo(() => {
     if (trendData.length < 7) return 'flat'
     const recent = trendData.slice(-7).filter(d => d.adherencePercent > 0)
@@ -330,12 +369,39 @@ export default function ProtocolOperatingSystem() {
 
   const handleToggle = async (protocolId: string) => {
     try {
-      await toggleCompletion({ sessionId, protocolItemId: protocolId as any })
-    } catch {}
+      await toggleCompletion({ sessionId, protocolItemId: protocolId })
+    } catch { /* ignore */ }
   }
 
+  const empty = !seeding && protocolStatus.total === 0 && activeProtocols !== undefined
+
   return (
-    <div>
+    <div style={{ padding: '16px 16px 110px', maxWidth: 720, margin: '0 auto' }}>
+      <div style={{
+        fontSize: 8, fontFamily: 'monospace', letterSpacing: '0.14em',
+        color: 'rgba(255,255,255,0.28)', marginBottom: 12, textTransform: 'uppercase' as const,
+      }}>
+        Personal twin log · Not medical advice · Track what you log
+      </div>
+      {seeding && (
+        <div style={{
+          marginBottom: 12, padding: '10px 12px', borderRadius: 10,
+          border: '1px solid rgba(0,255,204,0.15)', background: 'rgba(0,255,204,0.05)',
+          fontSize: 10, fontFamily: 'monospace', color: 'rgba(0,255,204,0.8)',
+        }}>
+          Seeding starter protocol stack…
+        </div>
+      )}
+      {empty && (
+        <div style={{
+          marginBottom: 12, padding: '12px 14px', borderRadius: 12,
+          border: '1px solid rgba(196,164,108,0.2)', background: 'rgba(196,164,108,0.06)',
+          fontSize: 11, fontFamily: 'monospace', color: 'rgba(232,224,216,0.75)', lineHeight: 1.5,
+        }}>
+          No protocols yet. Starter stack seeds automatically — pull to refresh or use Quick Log (V) to add items.
+        </div>
+      )}
+
       {/* ═══ HEADER: Adherence Score + Stats ═══ */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
@@ -511,7 +577,7 @@ export default function ProtocolOperatingSystem() {
               const critical = categories.find((c: any) => c.bioStatus === 'critical')
               if (!critical) return ''
               const meta = CATEGORY_META[critical.category]
-              return `${meta?.label ?? critical.category} biomarker is critical (${critical.biomarker}: ${critical.bioValue ?? 'N/A'} ${critical.bioUnit}). Completing your ${meta?.label?.toLowerCase()} protocols will directly improve this marker.`
+              return `${meta?.label ?? critical.category} logged marker looks off-range (${critical.biomarker}: ${critical.bioValue ?? 'N/A'} ${critical.bioUnit}). Review your ${meta?.label?.toLowerCase()} protocols and discuss with your clinician — Vive does not diagnose or prescribe.`
             })()}
           </p>
         </motion.div>

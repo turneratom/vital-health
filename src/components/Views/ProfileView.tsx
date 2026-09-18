@@ -12,15 +12,9 @@ import {
   deserializeBaselines,
   getBaselineSummaryCards,
 } from '@/lib/intelligence/BioLogic';
+import { getTwinSessionId } from '@/lib/twinSession';
 
 /* ── Session ID ── */
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'ssr';
-  let id = localStorage.getItem('vive-session-id');
-  if (!id) { id = crypto.randomUUID(); localStorage.setItem('vive-session-id', id); }
-  return id;
-}
-
 /* ── Unit Conversion Helpers ── */
 const cmToFeetInches = (cm: number) => {
   const totalInches = cm / 2.54;
@@ -191,7 +185,7 @@ function EditableField({
    PROFILE VIEW — Main Component
    ══════════════════════════════════════════════════════════════ */
 export default function ProfileView() {
-  const sessionId = useMemo(getSessionId, []);
+  const sessionId = useMemo(() => getTwinSessionId(), []);
 
   /* ── Convex Data ── */
   const physicalBaseline = useQuery(api.queries.getPhysicalBaseline, { sessionId });

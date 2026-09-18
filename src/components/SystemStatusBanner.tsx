@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useAction, useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const T = {
   bg: '#0A0A0B',
@@ -79,9 +80,7 @@ interface SystemStatusResult {
 }
 
 export default function SystemStatusBanner() {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const generateStatus = useAction(api.aiContextEngine.generateSystemStatus)
   const bioContext = useQuery(api.aiContextEngine.getBioContext, { sessionId })

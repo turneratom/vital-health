@@ -9,6 +9,7 @@ import {
 } from '../../convex/supplementLogic'
 import type { BioVaultData, SystemVitals } from '../../convex/supplementLogic'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    BIO-VAULT MODAL — Medical Dossier Interface
    
@@ -265,10 +266,6 @@ const TYPE_LABELS: Record<string, { label: string; color: string }> = {
   clinical:   { label: 'CLINICAL',   color: T.purple },
 }
 
-function getSessionId(): string {
-  try { return localStorage.getItem('vive-session-id') || 'guest-user' } catch { return 'guest-user' }
-}
-
 /* ── Main Component ── */
 
 interface BioVaultModalProps {
@@ -278,7 +275,7 @@ interface BioVaultModalProps {
 }
 
 export default function BioVaultModal({ isOpen, onClose, initialMarkerId }: BioVaultModalProps) {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const [selectedMarker, setSelectedMarker] = useState<string | null>(initialMarkerId ?? null)
 
   const bioVault = useQuery(api.queries.getBioVaultBySession, isOpen ? { sessionId } : 'skip')

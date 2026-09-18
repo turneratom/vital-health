@@ -3,6 +3,7 @@ import { useAction, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { classifyAllMarkers, type ClassifiedMarker } from '@/lib/LabResultParser'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    useRapidIntake — Single-text-area AI onboarding hook
    
@@ -150,7 +151,7 @@ export function useRapidIntake() {
     )
 
     try {
-      const sessionId = localStorage.getItem('vive-session-id') || 'guest-user'
+      const sessionId = getTwinSessionId()
 
       // Call AI Brain
       const aiResult = await instantParse({ rawText, inputType: 'free_text' })

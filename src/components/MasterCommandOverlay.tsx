@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    MASTER COMMAND OVERLAY
    
@@ -30,14 +31,6 @@ const T = {
   gold: '#FFD700',
   border: 'rgba(255,255,255,0.05)',
   borderBlue: 'rgba(59,130,246,0.12)',
-}
-
-function getSessionId(): string {
-  try {
-    let id = localStorage.getItem('vive-session-id')
-    if (!id) { id = `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`; localStorage.setItem('vive-session-id', id) }
-    return id
-  } catch { return 'guest-user' }
 }
 
 /* ── Correction Protocols by drift type ── */
@@ -208,7 +201,7 @@ interface MasterCommandOverlayProps {
 }
 
 export default function MasterCommandOverlay({ isOpen, onClose }: MasterCommandOverlayProps) {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const driftData = useQuery(api.biologicalDrift.detectBiologicalDrift, isOpen ? { sessionId } : 'skip')
   const acceptIntervention = useMutation(api.biologicalDrift.acceptDriftIntervention)
   const [executing, setExecuting] = useState(false)

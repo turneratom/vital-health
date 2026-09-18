@@ -1,3 +1,4 @@
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════════
    PROTOCOL STACK — Time-Aware + Recovery-Aware + Overdue-Aware
    Horizontal Icon Drawer with Hold-to-Confirm + Intelligence Overlay
@@ -55,13 +56,6 @@ const S = {
 }
 
 const HOLD_DURATION = 600
-
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'ssr'
-  let id = localStorage.getItem('vive-session-id')
-  if (!id) { id = crypto.randomUUID(); localStorage.setItem('vive-session-id', id) }
-  return id
-}
 
 function getCategoryColor(category: string, isRecoveryBoosted?: boolean): { color: string; glow: string } {
   if (isRecoveryBoosted && category === 'recovery') return { color: S.recovery, glow: S.recoveryGlow }
@@ -705,7 +699,7 @@ function WindowIndicator({ windowInfo, isRecovery, overdueCount }: { windowInfo:
    ══════════════════════════════════════════════════════════════════ */
 
 export default function ProtocolStack() {
-  const sessionId = getSessionId()
+  const sessionId = getTwinSessionId()
   const protocolStatus = useQuery(api.protocols.getTodayProtocolStatus, { sessionId })
   const toggleMutation = useMutation(api.protocols.oneTapVerify)
   const rescheduleMutation = useMutation(api.protocols.rescheduleProtocolTime)

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    PREDICTIVE TIMELINE — 90-Day Biomarker Projection Toggle
    
@@ -32,10 +33,6 @@ const T = {
   border: 'rgba(255,255,255,0.05)',
 }
 
-function getSessionId(): string {
-  try { return localStorage.getItem('vive-session-id') || 'guest-user' } catch { return 'guest-user' }
-}
-
 function scoreColor(score: number): string {
   if (score >= 85) return T.teal
   if (score >= 70) return T.green
@@ -50,7 +47,7 @@ interface PredictiveTimelineProps {
 }
 
 export default function PredictiveTimeline({ isActive, onToggle }: PredictiveTimelineProps) {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const [driftExpanded, setDriftExpanded] = useState(false)
 
   const projection = useQuery(

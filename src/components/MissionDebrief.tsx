@@ -3,6 +3,7 @@ import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { Sparkline } from './Sparkline'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    MISSION DEBRIEF — Weekly Squad Performance Report
    
@@ -39,9 +40,7 @@ interface MissionDebriefProps {
 }
 
 export default function MissionDebrief({ onClose }: MissionDebriefProps) {
-  const sessionId = typeof window !== 'undefined'
-    ? localStorage.getItem('vive-session-id') || 'guest-user'
-    : 'guest-user'
+  const sessionId = getTwinSessionId()
 
   const debrief = useQuery(api.weeklyTacticalReport.getMissionDebrief, { sessionId })
   const [expandedSection, setExpandedSection] = useState<string | null>('rankings')

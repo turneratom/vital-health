@@ -1,3 +1,4 @@
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════════
    OPTIMIZATION STORE — High-End Health Concierge
    
@@ -390,11 +391,6 @@ const PRODUCT_CATALOG: StoreProduct[] = [
    ══════════════════════════════════════════════════════════════════ */
 
 /** Get session ID for analytics */
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'default';
-  return sessionStorage.getItem('vive-session-id') || 'default';
-}
-
 /**
  * useAffiliateTracker — wraps affiliate link opens with click-through
  * event logging to the analyticsEvents table before redirecting.
@@ -418,7 +414,7 @@ function useAffiliateTracker() {
       triggerSource: 'buy_button' | 'hero_buy' | 'alternative_view' | 'daily_protocol';
     }) => {
       const now = Date.now();
-      const sessionId = getSessionId();
+      const sessionId = getTwinSessionId();
 
       // Debounce: prevent duplicate clicks within 2 seconds
       const dedupeKey = `${product.id}:${context.triggerSource}`;

@@ -4,6 +4,7 @@ import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { getSwapSuggestion } from '../lib/bioSyncLogic'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════
    DAILY PROTOCOL — Readiness-Reactive Medical OS Checklist
    
@@ -168,10 +169,6 @@ const READINESS_LEVEL_CONFIG: Record<string, {
     icon: '🔴',
     label: 'CRITICAL',
   },
-}
-
-function getSessionId(): string {
-  try { return localStorage.getItem('vive-session-id') || 'guest-user' } catch { return 'guest-user' }
 }
 
 /* ── Readiness Signal Pill ── */
@@ -1160,7 +1157,7 @@ function ProgressRing({ percentage, size = 56 }: { percentage: number; size?: nu
    ══════════════════════════════════════════════════════════════ */
 
 export default function DailyProtocol({ onProtocolComplete }: { onProtocolComplete?: () => void } = {}) {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const [dismissedCorrections, setDismissedCorrections] = useState<Set<string>>(new Set())
   const [expandedWindow, setExpandedWindow] = useState<string | null>(null)
 

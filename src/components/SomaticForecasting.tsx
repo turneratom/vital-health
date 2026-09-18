@@ -3,6 +3,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { AnimatePresence, motion } from "framer-motion";
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const T = {
   bg: "rgba(10,10,11,0.96)",
@@ -239,9 +240,7 @@ function PredictionCard({ prediction, index, isExpanded, onToggle }: {
    ═══════════════════════════════════════════════════════════════ */
 
 export default function SomaticForecasting() {
-  const sessionId = typeof window !== "undefined"
-    ? localStorage.getItem("vive-session-id") || "guest-user"
-    : "guest-user";
+  const sessionId = getTwinSessionId();
 
   const forecast = useQuery(api.somaticForecasting.getSomaticForecast, { sessionId });
   const [expandedId, setExpandedId] = useState<string | null>(null);

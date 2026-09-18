@@ -23,6 +23,7 @@ import {
   type MetabolicScoreResult,
 } from '@/utils/BioCalculations';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════
    STEP 1 — Collect Vitals (Age, Gender, Weight, Goal Weight)
    ═══════════════════════════════════════════════════════════ */
@@ -1138,10 +1139,7 @@ function OnboardingFlow() {
     setVitalsData(data);
 
     // Compute BioLogic baselines and persist to Convex
-    const sessionId = sessionStorage.getItem('vive-session-id') ?? crypto.randomUUID();
-    if (!sessionStorage.getItem('vive-session-id')) {
-      sessionStorage.setItem('vive-session-id', sessionId);
-    }
+    const sessionId = getTwinSessionId();
 
     const age = parseInt(data.age, 10) || 30;
     const rawWeight = parseFloat(data.weight) || 170;

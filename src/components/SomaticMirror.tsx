@@ -4,6 +4,7 @@ import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { useBiometricSync } from '@/hooks/useBiometricSync'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── HUD Design Tokens ── */
 const T = {
   bg: '#0A0A0B',
@@ -166,14 +167,6 @@ function getStrainLabel(level: StrainLevel): string {
   }
 }
 
-function getSessionId(): string {
-  try {
-    let id = localStorage.getItem('vive-session-id')
-    if (!id) { id = `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`; localStorage.setItem('vive-session-id', id) }
-    return id
-  } catch { return 'guest-user' }
-}
-
 /* ── Animated Spine Energy Flow ── */
 function SpineEnergyFlow({ readiness }: { readiness: number }) {
   const color = readiness >= 70 ? T.green : readiness >= 50 ? T.orange : T.red
@@ -333,7 +326,7 @@ function StrainChips({ zones, onSelect }: { zones: ZoneState[]; onSelect: (id: s
    ═══════════════════════════════════════════════════════════════ */
 
 export default function SomaticMirror({ compact = false }: { compact?: boolean }) {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const { vitals } = useBiometricSync()
   const [hoveredZone, setHoveredZone] = useState<string | null>(null)
   const [selectedZone, setSelectedZone] = useState<string | null>(null)

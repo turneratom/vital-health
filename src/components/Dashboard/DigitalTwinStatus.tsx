@@ -10,6 +10,7 @@ import {
   type PhysicalProfile,
 } from '@/lib/intelligence/BioLogic';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Design Tokens ── */
 const DT = {
   bg: '#0A0A0B',
@@ -29,16 +30,6 @@ const DT = {
 };
 
 /* ── Session helper ── */
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'ssr';
-  let id = localStorage.getItem('vive-session-id');
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem('vive-session-id', id);
-  }
-  return id;
-}
-
 /* ── Baseline status evaluation ── */
 interface BaselineStatus {
   hydration: 'on-track' | 'off-track';
@@ -259,7 +250,7 @@ function SystemRing({ label, status, value }: { label: string; status: 'on-track
 
 export default function DigitalTwinStatus() {
   const { vitals } = useBiometricSync();
-  const sessionId = useMemo(() => getSessionId(), []);
+  const sessionId = useMemo(() => getTwinSessionId(), []);
 
   // Fetch physical baseline from Convex for BioLogic computation
   const physicalBaseline = useQuery(api.queries.getPhysicalBaseline, { sessionId });

@@ -7,6 +7,7 @@ import { useGhostMode } from '@/components/Presence/usePresenceState';
 import { generatePrecisionStack } from '@/lib/supplementLogic';
 import type { PrecisionFocus, PrecisionItem, PrecisionStack } from '@/lib/supplementLogic';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Focus mode config ── */
 const FOCUS_MODES: { id: PrecisionFocus; label: string; icon: string; color: string; desc: string }[] = [
   { id: 'performance', label: 'Performance', icon: '⚡', color: '#FFB86B', desc: 'Peak power & endurance' },
@@ -172,9 +173,7 @@ export function SupplementProtocol() {
   // Session ID — stable across renders
   const [sessionId] = useState(() => {
     if (typeof window !== 'undefined') {
-      let id = localStorage.getItem('vive-session-id');
-      if (!id) { id = crypto.randomUUID(); localStorage.setItem('vive-session-id', id); }
-      return id;
+      return getTwinSessionId();
     }
     return 'default';
   });

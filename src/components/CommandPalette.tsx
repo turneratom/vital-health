@@ -137,18 +137,59 @@ export function CommandPalette({ onNavigate, onToggleRedline, onStartProtocol }:
       },
     });
 
+    items.push({
+      id: "manual-vitals-quick-log",
+      label: "Manual Vitals / Quick Log",
+      description: "Enter HR, HRV, sleep, steps, food (wearables coming later)",
+      icon: "⚡",
+      category: "protocols",
+      keywords: ["manual", "vitals", "quick", "log", "hr", "hrv", "sleep", "food", "meal"],
+      color: T.cyan,
+      action: () => {
+        window.dispatchEvent(new CustomEvent("vive-open-quick-log"));
+        setIsOpen(false);
+      },
+    });
+
+    items.push({
+      id: "biovault-paste",
+      label: "Bio-Vault (Paste Labs)",
+      description: "Paste lab text → parse → sync to vault",
+      icon: "◈",
+      category: "protocols",
+      keywords: ["biovault", "vault", "paste", "labs", "blood", "panel"],
+      color: T.green,
+      action: () => {
+        onNavigate?.("biovault");
+        setIsOpen(false);
+      },
+    });
+
+    items.push({
+      id: "food-quick-log",
+      label: "Food / Quick Log",
+      description: "Open journal for food, water & exercise text logs",
+      icon: "🥗",
+      category: "protocols",
+      keywords: ["food", "meal", "journal", "log", "nutrition", "water"],
+      color: T.gold,
+      action: () => {
+        onNavigate?.("journal");
+        setIsOpen(false);
+      },
+    });
+
     /* ── Protocol commands ── */
     items.push({
       id: "sync-hrv",
-      label: "Sync HRV",
-      description: "Force-sync heart rate variability from connected wearable",
+      label: "Sync HRV (Coming later)",
+      description: "Wearable OAuth not live — use Manual Vitals / Quick Log instead",
       icon: "💓",
       category: "protocols",
-      keywords: ["sync", "hrv", "heart", "variability", "wearable", "oura", "whoop"],
+      keywords: ["sync", "hrv", "heart", "variability", "wearable", "oura", "whoop", "coming later"],
       color: T.red,
       action: () => {
-        onStartProtocol?.("sync-hrv");
-        window.dispatchEvent(new CustomEvent("vive-biometric-sync", { detail: { forceSync: true, metric: "hrv" } }));
+        window.dispatchEvent(new CustomEvent("vive-open-quick-log"));
         setIsOpen(false);
       },
     });
@@ -274,9 +315,11 @@ export function CommandPalette({ onNavigate, onToggleRedline, onStartProtocol }:
 
     /* ── Navigation shortcuts ── */
     const navItems: { id: string; label: string; desc: string; icon: string; kw: string[]; view: string }[] = [
-      { id: "n-dashboard", label: "Command Center", desc: "Main dashboard overview", icon: "⬡", kw: ["home", "dashboard", "main", "overview"], view: "dashboard" },
+      { id: "n-dashboard", label: "Command Center", desc: "Home — Morning Brief & Visit Prep", icon: "⬡", kw: ["home", "dashboard", "main", "overview"], view: "dashboard" },
+      { id: "n-biovault", label: "Bio-Vault (Paste Labs)", desc: "Paste lab text into vault", icon: "◈", kw: ["vault", "bio", "paste", "labs"], view: "biovault" },
+      { id: "n-vitals", label: "Manual Vitals", desc: "Enter vitals manually (wearables coming later)", icon: "♡", kw: ["vitals", "manual", "hrv"], view: "vitals" },
       { id: "n-briefing", label: "Briefing Room", desc: "AI coaching & chat", icon: "◉", kw: ["briefing", "ai", "chat", "coach"], view: "briefing" },
-      { id: "n-journal", label: "Journal", desc: "Food, water & exercise logs", icon: "📓", kw: ["journal", "log", "food", "water"], view: "journal" },
+      { id: "n-journal", label: "Food / Quick Log", desc: "Food, water & exercise text logs", icon: "📓", kw: ["journal", "log", "food", "water", "meal"], view: "journal" },
       { id: "n-protocols", label: "Protocol Library", desc: "Browse all health protocols", icon: "✦", kw: ["protocol", "library", "browse", "all"], view: "protocols" },
       { id: "n-community", label: "Community", desc: "Network & leaderboard", icon: "👥", kw: ["community", "social", "network", "leaderboard"], view: "community" },
       { id: "n-report", label: "Weekly Report", desc: "Performance summary", icon: "📊", kw: ["report", "weekly", "summary", "review"], view: "report" },

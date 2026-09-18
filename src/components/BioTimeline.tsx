@@ -11,6 +11,7 @@ import type { BiometricInputs } from '@/lib/IntelligenceEngine'
 import { useProductRecommendations } from '@/lib/RecommendationEngine'
 import SomaticMirror from '@/components/SomaticMirror'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── HUD Design Tokens ── */
 const T = {
   bg: '#0A0A0B',
@@ -63,14 +64,6 @@ interface TimelineNode {
 }
 
 /* ── Helpers ── */
-function getSessionId(): string {
-  try {
-    let id = localStorage.getItem('vive-session-id')
-    if (!id) { id = `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`; localStorage.setItem('vive-session-id', id) }
-    return id
-  } catch { return 'guest-user' }
-}
-
 function formatTime(ts: number): string {
   const d = new Date(ts)
   const now = new Date()
@@ -716,7 +709,7 @@ function ProtocolQuickLog({
    ═══════════════════════════════════════════════════════════════ */
 
 export default function BioTimeline() {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const { vitals } = useBiometricSync()
   const { optimizationScore, bioReport } = useProductRecommendations(12)
 

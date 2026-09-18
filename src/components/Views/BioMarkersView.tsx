@@ -4,6 +4,7 @@ import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import { Sparkline } from '../Sparkline';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    BIO-MARKERS — Premium High-Density Blood-Work Analytics
    
@@ -760,7 +761,7 @@ function CategoryFilter({ active, onChange }: { active: Category; onChange: (c: 
    MAIN COMPONENT
    ═══════════════════════════════════════════════════════════════ */
 export default function BioMarkersView() {
-  const sessionId = typeof window !== 'undefined' ? (localStorage.getItem('vive-session-id') || 'guest-user') : 'guest-user';
+  const sessionId = getTwinSessionId();
   const bioVault = useQuery(api.queries.getBioVaultBySession, { sessionId });
   const [category, setCategory] = useState<Category>('all');
 

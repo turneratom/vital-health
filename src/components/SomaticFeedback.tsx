@@ -3,6 +3,7 @@ import { useQuery, useMutation, useAction } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════
    5-SECOND DAILY CHECK-IN
    
@@ -351,7 +352,7 @@ function CorrelationInsight({
 
 export default function SomaticFeedback({ isVisible, onClose }: { isVisible: boolean; onClose: () => void }) {
   const sessionId = useMemo(() => {
-    try { return localStorage.getItem('vive-session-id') || 'guest-user' } catch { return 'guest-user' }
+    return getTwinSessionId()
   }, [])
 
   // Queries

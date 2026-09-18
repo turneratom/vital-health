@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useMutation, useAction } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════
    ONBOARDING FLOW — 4-Step Clinical-Luxury Bio-Initialization
    
@@ -701,7 +702,7 @@ export default function OnboardingFlow() {
   const upsertVitals = useMutation(api.mutations.upsertUserVitals);
   const upsertPrefs = useMutation(api.mutations.upsertUserPreference);
 
-  const sessionId = typeof window !== 'undefined' ? localStorage.getItem('vive-session-id') || 'guest-user' : 'guest-user';
+  const sessionId = getTwinSessionId();
 
   const toggleSync = useCallback((id: string) => {
     setSyncedSources(prev => {

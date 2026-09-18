@@ -83,6 +83,7 @@ const BlueprintView = lazy(() => import('../Views/BlueprintView').then(resolve))
 const MilestoneGallery = lazy(() => import('../Views/MilestoneGallery').then(resolve));
 const WeeklyReportView = lazy(() => import('../Views/WeeklyReportView').then(resolve));
 const ResearchLibrary = lazy(() => import('../ClinicalAdvisor').then(resolve));
+const ProtocolOperatingSystem = lazy(() => import('@/components/ProtocolOperatingSystem').then(resolve));
 
 /* ── Premium View Transition Variants ── */
 const viewTransition = {
@@ -121,7 +122,7 @@ function ActiveViewRenderer({ activeView, onOpenBriefing }: { activeView: ViewId
       case 'briefing':
         return <ViewBoundary label="BRIEFING"><BriefingView /></ViewBoundary>;
       case 'protocols':
-        return <ViewBoundary label="PROTOCOLS"><ProtocolsView /></ViewBoundary>;
+        return <ViewBoundary label="PROTOCOLS"><ProtocolOperatingSystem /></ViewBoundary>;
       case 'dna':
         return <ViewBoundary label="DNA"><ViewGate feature="dna-insights" onNavigateBack={() => onOpenBriefing()}><DNAView /></ViewGate></ViewBoundary>;
       case 'activity':
@@ -270,13 +271,16 @@ export function ViewManager() {
   useEffect(() => {
     const onBrief = () => openMorningBrief();
     const onVisit = () => openVisitPacket();
+    const onQuickLog = () => handleOpenQuickLog();
     window.addEventListener('vive-open-morning-brief', onBrief);
     window.addEventListener('vive-open-visit-packet', onVisit);
+    window.addEventListener('vive-open-quick-log', onQuickLog);
     return () => {
       window.removeEventListener('vive-open-morning-brief', onBrief);
       window.removeEventListener('vive-open-visit-packet', onVisit);
+      window.removeEventListener('vive-open-quick-log', onQuickLog);
     };
-  }, [openMorningBrief, openVisitPacket]);
+  }, [openMorningBrief, openVisitPacket, handleOpenQuickLog]);
 
   // Default: open Morning Brief once per day after induction (demo home)
   useEffect(() => {
@@ -355,7 +359,7 @@ export function ViewManager() {
         />
 
         {/* View container with smooth transitions */}
-        <main className="flex-1 relative">
+        <main className="flex-1 relative" style={{ paddingBottom: 100 }}>
           <div className="absolute top-0 left-4 right-4 h-px"
             style={{
               background: ghostMode

@@ -6,6 +6,7 @@ import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import { useAnalytics } from '@/lib/useAnalytics';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ── Accent colors per mission profile ── */
 function getAccent(profile: MissionProfile) {
   switch (profile) {
@@ -75,7 +76,7 @@ export function TodaysProtocol({ onNavigateToDashboard }: TodaysProtocolProps) {
   const accent = getAccent(missionProfile);
 
   const sessionId = typeof window !== 'undefined'
-    ? (sessionStorage.getItem('vive-session-id') || 'default')
+    ? (getTwinSessionId())
     : 'default';
 
   // Fetch today's intake answers from the Dashboard Game Plan cards

@@ -3,6 +3,7 @@ import { useQuery, useAction } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ═══════════════════════════════════════════════════════════════
    DAILY VECTOR — AI-Powered Status + Action Orbits
    
@@ -34,14 +35,6 @@ const V = {
   gold: '#FFD700',
   border: 'rgba(255,255,255,0.05)',
   borderBlue: 'rgba(59,130,246,0.12)',
-}
-
-function getSessionId(): string {
-  try {
-    let id = localStorage.getItem('vive-session-id')
-    if (!id) { id = `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`; localStorage.setItem('vive-session-id', id) }
-    return id
-  } catch { return 'guest-user' }
 }
 
 const urgencyMeta = {
@@ -310,7 +303,7 @@ function SignalStrength({ signals }: { signals: number }) {
    ═══════════════════════════════════════════════════════════════ */
 
 export default function DailyVector() {
-  const sessionId = useMemo(() => getSessionId(), [])
+  const sessionId = useMemo(() => getTwinSessionId(), [])
   const vector = useQuery(api.dailyVector.getDailyVector, { sessionId })
   const [aiStatus, setAiStatus] = useState<string | null>(null)
   const [aiLoading, setAiLoading] = useState(false)

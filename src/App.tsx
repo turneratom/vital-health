@@ -1,3 +1,4 @@
+import { getTwinSessionId } from '@/lib/twinSession'
 /* DEPRECATED — see App.old.tsx history. Not imported anywhere.
    Legacy Digital Twin View
    
@@ -35,13 +36,6 @@ const DT = {
 }
 
 /* ── Session helper ── */
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'ssr'
-  let id = localStorage.getItem('vive-session-id')
-  if (!id) { id = crypto.randomUUID(); localStorage.setItem('vive-session-id', id) }
-  return id
-}
-
 /* ── Responsive hook ── */
 function useBreakpoint() {
   const [width, setWidth] = useState(() => typeof window !== 'undefined' ? window.innerWidth : 1200)
@@ -329,7 +323,7 @@ function LivePulse() {
    ══════════════════════════════════════════════════════════════════ */
 
 export default function App() {
-  const sessionId = getSessionId()
+  const sessionId = getTwinSessionId()
   const protocolStatus = useQuery(api.protocols.getTodayProtocolStatus, { sessionId })
   const { isMobile, isTablet, isDesktop } = useBreakpoint()
 

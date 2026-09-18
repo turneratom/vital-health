@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { EliteBenefitsModal } from '@/components/EliteBenefitsModal';
 import { ConciergeGateway } from '@/components/ConciergeGateway';
 
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════ */
 /*  ACCESS CONTROLLER — Membership Tier Gating System            */
 /*                                                                */
@@ -97,19 +98,9 @@ const AccessCtx = createContext<AccessContext>({
   isUpgrading: false,
 });
 
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'default';
-  let id = sessionStorage.getItem('vive-session-id');
-  if (!id) {
-    id = crypto.randomUUID();
-    sessionStorage.setItem('vive-session-id', id);
-  }
-  return id;
-}
-
 /* ── Provider ── */
 export function AccessControllerProvider({ children }: { children: ReactNode }) {
-  const sessionId = getSessionId();
+  const sessionId = getTwinSessionId();
   const localStyle = useUserStyle();
   const [isUpgrading, setIsUpgrading] = useState(false);
   const [showUpgradeFlash, setShowUpgradeFlash] = useState(false);

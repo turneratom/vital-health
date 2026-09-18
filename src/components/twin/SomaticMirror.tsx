@@ -1,3 +1,4 @@
+import { getTwinSessionId } from '@/lib/twinSession'
 /* ══════════════════════════════════════════════════════════════════
    SOMATIC MIRROR — Digital Twin Body Visualization
    
@@ -111,13 +112,6 @@ const SILHOUETTE_PATH = `
 `
 
 /* ── Helper: get session ID ── */
-function getSessionId(): string {
-  if (typeof window === 'undefined') return 'ssr'
-  let id = localStorage.getItem('vive-session-id')
-  if (!id) { id = crypto.randomUUID(); localStorage.setItem('vive-session-id', id) }
-  return id
-}
-
 /* ── Region Glow Component ── */
 function RegionGlow({
   region,
@@ -263,7 +257,7 @@ function RegionLegend({
    ══════════════════════════════════════════════════════════════════ */
 
 export default function SomaticMirror() {
-  const sessionId = getSessionId()
+  const sessionId = getTwinSessionId()
   const protocolStatus = useQuery(api.protocols.getTodayProtocolStatus, { sessionId })
 
   const [windowInfo, setWindowInfo] = useState<WindowInfo>(() => getBiologicalWindow())
